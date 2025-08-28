@@ -38,8 +38,9 @@
         /* Stijlen voor de wijzer en de wijzerplaat */
         #gauge-container {
             position: relative;
-            width: 300px; 
-            aspect-ratio: 2 / 1; 
+            /* De breedte is 1000px en de hoogte 500px (verhouding 2:1) */
+            width: 1000px; 
+            height: 500px;
             margin: 20px auto;
             overflow: hidden;
         }
@@ -55,9 +56,9 @@
             position: absolute;
             left: 50%;
             bottom: 0;
-            width: 50%; 
-            height: 25%;
-            /* Zorgt dat de wijzer roteert vanaf het midden van de onderkant */
+            /* De wijzer is 400px breed en 50px hoog */
+            width: 400px; 
+            height: 50px;
             transform-origin: center bottom;
             transition: transform 1s linear;
             z-index: 10;
@@ -85,8 +86,8 @@
     <p class="timer-status" id="statusText">De timer is ingesteld.</p>
 
     <div id="gauge-container">
-        <img id="gauge-bg" src="https://www.pngkey.com/png/full/233-2332677_image-500580-placeholder-transparent.png" alt="Wijzerplaat">
-        <img id="gauge-pointer" src="https://www.pngkey.com/png/full/233-2332677_image-500580-placeholder-transparent.png" alt="Wijzer">
+        <img id="gauge-bg" src="assets/background.png" alt="Wijzerplaat">
+        <img id="gauge-pointer" src="assets/indicator.png" alt="Wijzer">
     </div>
 
     <button id="back-button">Terug</button>
@@ -101,7 +102,6 @@
         const audio = new Audio(soundUrl);
         const gaugePointer = document.getElementById('gauge-pointer');
 
-        // Stel de startrotatie in op -90 graden
         gaugePointer.style.transform = 'rotate(-90deg)';
 
         function getCookie(name) {
