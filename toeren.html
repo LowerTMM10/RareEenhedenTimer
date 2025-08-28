@@ -126,26 +126,28 @@ document.addEventListener('DOMContentLoaded', () => {
     // Start op 0°
     gaugePointer.style.setProperty('--angle', '0deg');
 
-    const timerInterval = setInterval(() => {
-      remainingSeconds--;
+const timerInterval = setInterval(() => {
+  remainingSeconds--;
 
-      const rotationDegrees = (180 / totalSeconds) * (totalSeconds - remainingSeconds);
-      gaugePointer.style.setProperty('--angle', `${rotationDegrees}deg`);
+  if (remainingSeconds > 0) {
+    // Kies een willekeurige hoek tussen 0° en 160°
+    const randomAngle = Math.floor(Math.random() * 161); 
+    gaugePointer.style.setProperty('--angle', `${randomAngle}deg`);
+  } else {
+    clearInterval(timerInterval);
 
-      if (remainingSeconds < 0) {
-        clearInterval(timerInterval);
+    audio.play().then(() => {
+      alert('De timer van ' + minutes + ' minuten is klaar!');
+    }).catch(error => {
+      console.error('Fout bij het afspelen van het geluid:', error);
+      alert('De timer van ' + minutes + ' minuten is klaar! (Kon geluid niet afspelen)');
+    });
 
-        audio.play().then(() => {
-          alert('De timer van ' + minutes + ' minuten is klaar!');
-        }).catch(error => {
-          console.error('Fout bij het afspelen van het geluid:', error);
-          alert('De timer van ' + minutes + ' minuten is klaar! (Kon geluid niet afspelen)');
-        });
+    statusElement.textContent = 'De timer is klaar!';
+    gaugePointer.style.setProperty('--angle', '180deg'); // eindpositie
+  }
+}, 1000);
 
-        statusElement.textContent = 'De timer is klaar!';
-        gaugePointer.style.setProperty('--angle', '180deg');
-      }
-    }, 1000);
   } // <-- deze sloot je else af; die miste je
   backButton.addEventListener('click', () => window.history.back());
 });
