@@ -109,8 +109,6 @@
         const audio = new Audio(soundUrl);
         const gaugePointer = document.getElementById('gauge-pointer');
 
-        gaugePointer.style.transform = 'rotate(-90deg)';
-
         function getCookie(name) {
             const cookieString = document.cookie;
             const cookies = cookieString.split(';');
@@ -135,27 +133,29 @@
 
             statusElement.textContent = `De timer is ingesteld op ${minutes} minuut${minutes === 1 ? '' : 'en'}.`;
 
-            const timerInterval = setInterval(() => {
-                remainingSeconds--;
+    gaugePointer.style.transform = 'rotate(0deg)';
 
-                const rotationDegrees = ((180 / totalSeconds) * (totalSeconds - remainingSeconds)) - 90;
-                gaugePointer.style.transform = `rotate(${rotationDegrees}deg)`;
+    const timerInterval = setInterval(() => {
+        remainingSeconds--;
 
-                if (remainingSeconds < 0) {
-                    clearInterval(timerInterval);
-                    
-                    audio.play().then(() => {
-                        alert('De timer van ' + minutes + ' minuten is klaar!');
-                    }).catch(error => {
-                        console.error('Fout bij het afspelen van het geluid:', error);
-                        alert('De timer van ' + minutes + ' minuten is klaar! (Kon geluid niet afspelen)');
-                    });
+        const rotationDegrees = (180 / totalSeconds) * (totalSeconds - remainingSeconds);
+        gaugePointer.style.transform = `rotate(${rotationDegrees}deg)`;
 
-                    statusElement.textContent = 'De timer is klaar!';
-                    gaugePointer.style.transform = 'rotate(90deg)'; 
-                }
-            }, 1000);
+        if (remainingSeconds < 0) {
+            clearInterval(timerInterval);
+        
+            audio.play().then(() => {
+                alert('De timer van ' + minutes + ' minuten is klaar!');
+            }).catch(error => {
+                console.error('Fout bij het afspelen van het geluid:', error);
+                alert('De timer van ' + minutes + ' minuten is klaar! (Kon geluid niet afspelen)');
+            });
+
+            statusElement.textContent = 'De timer is klaar!';
+            gaugePointer.style.transform = 'rotate(180deg)';
         }
+    }, 1000);
+
 
         backButton.addEventListener('click', () => {
             window.history.back();
