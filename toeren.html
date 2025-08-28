@@ -54,22 +54,22 @@
             margin: 20px auto;
             overflow: hidden; /* Verbergt de buitenste delen van de cirkel */
         }
-        #gauge-bg, #gauge-pointer {
+        #gauge-bg {
             position: absolute;
             left: 50%;
             bottom: 0;
             transform: translateX(-50%);
-            transform-origin: center bottom; /* Zorg ervoor dat de wijzer vanuit de basis roteert */
-        }
-        #gauge-bg {
             width: 100%;
-            height: 200%; /* Maakt een volledige cirkel die deels verborgen is */
+            height: 200%;
         }
         #gauge-pointer {
+            position: absolute;
+            left: 50%;
+            bottom: 0;
             width: 10%; /* Pas de breedte aan */
             height: 80%; /* Pas de lengte aan */
-            transform: rotate(0deg); /* Startpositie: 0 graden */
-            transition: transform 1s linear; /* Vloeiende overgang van de rotatie */
+            transform-origin: center bottom;
+            transition: transform 1s linear;
         }
         button {
             padding: 10px 20px;
@@ -112,6 +112,9 @@
         const audio = new Audio(soundUrl);
         const gaugePointer = document.getElementById('gauge-pointer');
 
+        // Start de wijzer direct op -90 graden
+        gaugePointer.style.transform = 'rotate(-90deg)';
+
         function getCookie(name) {
             const cookieString = document.cookie;
             const cookies = cookieString.split(';');
@@ -140,8 +143,8 @@
             const timerInterval = setInterval(() => {
                 remainingSeconds--;
 
-                // Bereken de rotatie van de wijzer
-                const rotationDegrees = (180 / totalSeconds) * (totalSeconds - remainingSeconds) - 90;
+                // Bereken de rotatie: van -90 graden tot 90 graden (180 graden totaal)
+                const rotationDegrees = ((180 / totalSeconds) * (totalSeconds - remainingSeconds)) - 90;
                 gaugePointer.style.transform = `rotate(${rotationDegrees}deg)`;
 
                 if (remainingSeconds < 0) {
@@ -155,7 +158,7 @@
                     });
 
                     countdownDisplay.textContent = 'Klaar!';
-                    gaugePointer.style.transform = 'rotate(180deg)'; // Zorg ervoor dat de wijzer op 180 graden eindigt
+                    gaugePointer.style.transform = 'rotate(90deg)'; // Zorg ervoor dat de wijzer op 90 graden eindigt
                 } else {
                     const displayMinutes = Math.floor(remainingSeconds / 60);
                     const displaySeconds = remainingSeconds % 60;
