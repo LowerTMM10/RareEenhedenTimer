@@ -97,10 +97,10 @@
                 
                 // Vul de dropdown met de data
                 data.forEach(item => {
-                    const firstWord = item.split(' ')[0]; // Haal het eerste woord op
+                    const firstWord = item.split(' ')[0];
                     const option = document.createElement('option');
-                    option.textContent = item; // Volledige tekst zichtbaar in de dropdown
-                    option.value = firstWord; // Alleen het eerste woord in de waarde voor de URL
+                    option.textContent = item;
+                    option.value = firstWord;
                     dropdown.appendChild(option);
                 });
             })
@@ -111,12 +111,20 @@
 
         // Event listener voor de knop
         redirectButton.addEventListener('click', () => {
-            const selectedOptionValue = dropdown.value; // Dit is nu het eerste woord
+            const selectedOptionValue = dropdown.value;
             const minutes = minutesInput.value;
 
             if (selectedOptionValue && minutes) {
-                // Maak de URL aan en stuur de gebruiker door
-                const url = `https://rare-timer.netlify.app/${selectedOptionValue}/${minutes}`;
+                // Maak een vervaldatum voor de cookie (bijv. 1 dag)
+                const d = new Date();
+                d.setTime(d.getTime() + (24 * 60 * 60 * 1000));
+                const expires = "expires=" + d.toUTCString();
+
+                // Stel de cookie in met de naam "TimerDuur"
+                document.cookie = `TimerDuur=${minutes}; ${expires}; path=/`;
+
+                // Maak de nieuwe URL aan zonder het aantal minuten
+                const url = `https://rare-timer.netlify.app/${selectedOptionValue}`;
                 window.location.href = url;
             } else {
                 alert('Selecteer een optie en voer het aantal minuten in.');
