@@ -1,149 +1,81 @@
-<!DOCTYPE html>
-<html lang="nl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Normale timer</title>
-    <style>
-        /* Laad je eigen lettertype */
-        /*
-           Vervang de URL met de link naar jouw font-bestand.
-           Het format moet een van de onderstaande zijn.
-        */
-        @font-face {
-            font-family: '7-segment';
-            src: url('assets/7-segment.ttf') format('truetype');
-            /* Je kunt meerdere formaten toevoegen voor bredere browserondersteuning */
-            /* src: url('https://example.com/pad/naar/jouw-font.woff') format('woff'),
-                   url('https://example.com/pad/naar/jouw-font.ttf') format('truetype'); */
-        }
-        
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            color: #333;
-            width: 100vw;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            margin: 0;
-            text-align: center;
-        }
-        .container {
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            max-width: 90%; 
-            width: 400px;
-        }
-        h1 {
-            color: #007BFF;
-        }
-        .timer-status {
-            font-size: 1.2em;
-            margin-top: 10px;
-        }
-        #countdown-display {
-            /* Gebruik hier de naam van je eigen lettertype */
-            font-family: '7-segment', sans-serif; 
-            font-size: 3em;
-            font-weight: bold;
-            margin: 20px 0;
-            color: #d9534f;
-        }
-        button {
-            padding: 10px 20px;
-            background-color: #6c757d;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            margin-top: 20px;
-        }
-        button:hover {
-            background-color: #5a6268;
-        }
-    </style>
-</head>
-<body>
-
 <div class="container">
     <h1>Normale timer</h1>
     <p class="timer-status" id="statusText">De timer is ingesteld.</p>
-    <div id="countdown-display">--:--</div>
     <button id="back-button">Terug</button>
+    <!-- Random trein -->
+    <img id="train" src="" alt="Trein" style="position:absolute; top:70%; left:-607px; width:607px; height:78px; display:none;">
 </div>
 
 <script>
-    document.addEventListener('DOMContentLoaded', (event) => {
-        const soundUrl = 'assets/alarm.mp3'; 
+document.addEventListener('DOMContentLoaded', (event) => {
+    const soundUrl = 'assets/alarm.mp3'; 
+    const statusElement = document.getElementById('statusText');
+    const backButton = document.getElementById('back-button');
+    const audio = new Audio(soundUrl);
+    const train = document.getElementById('train');
 
-        const statusElement = document.getElementById('statusText');
-        const countdownDisplay = document.getElementById('countdown-display');
-        const backButton = document.getElementById('back-button');
-        const audio = new Audio(soundUrl);
+    const trains = ['assets/virm.png', 'assets/icng.png', 'assets/icm.png'];
 
-        function getCookie(name) {
-            const cookieString = document.cookie;
-            const cookies = cookieString.split(';');
-            for (let i = 0; i < cookies.length; i++) {
-                let cookie = cookies[i].trim();
-                if (cookie.startsWith(name + '=')) {
-                    return cookie.substring(name.length + 1);
-                }
+    function getCookie(name) {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            let cookie = cookies[i].trim();
+            if (cookie.startsWith(name + '=')) {
+                return cookie.substring(name.length + 1);
             }
-            return null;
         }
+        return null;
+    }
 
-        const timerDurationValue = getCookie('TimerDuur');
-        const minutes = parseInt(timerDurationValue, 10);
+    const timerDurationValue = getCookie('TimerDuur');
+    const minutes = parseInt(timerDurationValue, 10);
 
-        if (timerDurationValue === null || isNaN(minutes)) {
-            statusElement.textContent = 'Fout: De "TimerDuur" cookie is niet gevonden of is geen geldig getal.';
-            countdownDisplay.textContent = 'Fout!';
-            console.error('Cookie "TimerDuur" is niet gevonden of is geen geldig getal.');
-        } else {
-            const totalSeconds = minutes * 60;
-            let remainingSeconds = totalSeconds;
+    if (timerDurationValue === null || isNaN(minutes)) {
+        statusElement.textContent = 'Fout: De "TimerDuur" cookie is niet gevonden of is geen geldig getal.';
+        console.error('Cookie "TimerDuur" is niet gevonden of is geen geldig getal.');
+    } else {
+        const totalSeconds = minutes * 60;
+        let remainingSeconds = totalSeconds;
 
-            statusElement.textContent = `De timer is ingesteld op ${minutes} minuut${minutes === 1 ? '' : 'en'}.`;
+        statusElement.textContent = `De timer is ingesteld op ${minutes} minuut${minutes === 1 ? '' : 'en'}.`;
 
-            const timerInterval = setInterval(() => {
-                remainingSeconds--;
+        const timerInterval = setInterval(() => {
+            remainingSeconds--;
 
-                if (remainingSeconds < 0) {
-                    clearInterval(timerInterval);
-                    
-                    audio.play().then(() => {
-                        alert('De timer van ' + minutes + ' minuten is klaar!');
-                    }).catch(error => {
-                        console.error('Fout bij het afspelen van het geluid:', error);
-                        alert('De timer van ' + minutes + ' minuten is klaar! (Kon geluid niet afspelen)');
-                    });
+            // Willekeurige trein laten verschijnen met 10% kans per seconde
+            if (Math.random() < 0.1) {
+                const randomTrain = trains[Math.floor(Math.random() * trains.length)];
+                train.src = randomTrain;
+                train.style.left = '-607px';
+                train.style.display = 'block';
 
-                    countdownDisplay.textContent = '00:00';
-                } else {
-                    const displayMinutes = Math.floor(remainingSeconds / 60);
-                    const displaySeconds = remainingSeconds % 60;
-                    
-                    const formattedMinutes = String(displayMinutes).padStart(2, '0');
-                    const formattedSeconds = String(displaySeconds).padStart(2, '0');
-                    
-                    countdownDisplay.textContent = `${formattedMinutes}:${formattedSeconds}`;
-                }
-            }, 1000);
-        }
+                let trainPos = -607;
+                const trainInterval = setInterval(() => {
+                    trainPos += 10; // snelheid van de trein
+                    train.style.left = trainPos + 'px';
+                    if (trainPos > window.innerWidth) {
+                        clearInterval(trainInterval);
+                        train.style.display = 'none';
+                    }
+                }, 20);
+            }
 
-        backButton.addEventListener('click', () => {
-            window.history.back();
-        });
+            if (remainingSeconds < 0) {
+                clearInterval(timerInterval);
+                
+                audio.play().then(() => {
+                    alert('De timer van ' + minutes + ' minuten is klaar!');
+                }).catch(error => {
+                    console.error('Fout bij het afspelen van het geluid:', error);
+                    alert('De timer van ' + minutes + ' minuten is klaar! (Kon geluid niet afspelen)');
+                });
+
+            }
+        }, 1000);
+    }
+
+    backButton.addEventListener('click', () => {
+        window.history.back();
     });
+});
 </script>
-
-</body>
-</html>
