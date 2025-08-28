@@ -2,7 +2,7 @@
 <html lang="nl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-schaal=1.0">
     <title>Toeren Timer</title>
     <style>
         body {
@@ -39,7 +39,6 @@
         #gauge-container {
             position: relative;
             width: 300px; 
-            /* Maakt de container platter */
             aspect-ratio: 2 / 1; 
             margin: 20px auto;
             overflow: hidden;
@@ -56,11 +55,13 @@
             position: absolute;
             left: 50%;
             bottom: 0;
-            /* De wijzer heeft een verhouding van 1:15 nodig (breedte:hoogte) */
-            width: 20px; 
-            height: 300px; 
+            /* De wijzer is nu de helft van de breedte van de container */
+            width: 50%; 
+            /* En de hoogte is gebaseerd op de breedte van de wijzer */
+            height: 25%;
             transform-origin: center bottom;
             transition: transform 1s linear;
+            z-index: 10; /* Zorgt dat de wijzer boven de achtergrond is */
         }
         button {
             padding: 10px 20px;
@@ -94,7 +95,7 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', (event) => {
-        const soundUrl = 'assets/alarm.mp3'; 
+        const soundUrl = 'https://github.com/LowerTMM10/RareEenhedenTimer/raw/refs/heads/main/alarm.mp3'; 
 
         const statusElement = document.getElementById('statusText');
         const backButton = document.getElementById('back-button');
