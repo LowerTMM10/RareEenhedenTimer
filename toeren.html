@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Toeren Timer (via Cookie)</title>
+    <title>Toeren Timer</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
             color: #333;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             height: 100vh;
@@ -27,8 +28,14 @@
             color: #007BFF;
         }
         .timer-status {
-            font-size: 1.5em;
-            margin-top: 20px;
+            font-size: 1.2em;
+            margin-top: 10px;
+        }
+        #countdown-display {
+            font-size: 3em;
+            font-weight: bold;
+            margin: 20px 0;
+            color: #d9534f;
         }
     </style>
 </head>
@@ -36,16 +43,17 @@
 
 <div class="container">
     <h1>Timer voor de Toeren</h1>
-    <p>De timer is ingesteld op:</p>
-    <div class="timer-status" id="statusText">Laden...</div>
+    <p class="timer-status" id="statusText">De timer is ingesteld.</p>
+    <div id="countdown-display">--:--</div>
 </div>
 
 <script>
     document.addEventListener('DOMContentLoaded', (event) => {
-        // De URL van het geluidsbestand.
-        const soundUrl = 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3'; 
+        // De URL van het geluidsbestand, zoals jij hebt aangegeven
+        const soundUrl = 'https://github.com/LowerTMM10/RareEenhedenTimer/raw/refs/heads/main/alarm.mp3'; 
 
         const statusElement = document.getElementById('statusText');
+        const countdownDisplay = document.getElementById('countdown-display');
         const audio = new Audio(soundUrl);
 
         // Functie om de waarde van een specifieke cookie op te halen
@@ -54,38 +62,45 @@
             const cookies = cookieString.split(';');
             for (let i = 0; i < cookies.length; i++) {
                 let cookie = cookies[i].trim();
-                // Controleer of de cookie begint met de naam + "="
                 if (cookie.startsWith(name + '=')) {
-                    // Haal de waarde op na de naam en het "=" teken
                     return cookie.substring(name.length + 1);
                 }
             }
-            return null; // Geen cookie gevonden
+            return null;
         }
 
         // Haal de "TimerDuur" cookie op
         const timerDurationValue = getCookie('TimerDuur');
         const minutes = parseInt(timerDurationValue, 10);
 
-        // Controleer of de cookie en de waarde geldig zijn
         if (timerDurationValue === null || isNaN(minutes)) {
             statusElement.textContent = 'Fout: De "TimerDuur" cookie is niet gevonden of is geen geldig getal.';
+            countdownDisplay.textContent = 'Fout!';
             console.error('Cookie "TimerDuur" is niet gevonden of is geen geldig getal.');
         } else {
-            // Bereken de totale tijd in milliseconden
-            const totalMilliseconds = minutes * 60 * 1000;
-            statusElement.textContent = `${minutes} minuut${minutes === 1 ? '' : 'en'}.`;
+            const totalSeconds = minutes * 60;
+            let remainingSeconds = totalSeconds;
 
-            // Stel de timer in
-            setTimeout(() => {
-                // Wanneer de timer is afgelopen:
-                // 1. Speel het geluid af
-                audio.play();
-                
-                // 2. Toon een melding
-                alert('De timer van ' + minutes + ' minuten is klaar!');
-                
-            }, totalMilliseconds);
+            statusElement.textContent = `De timer is ingesteld op ${minutes} minuut${minutes === 1 ? '' : 'en'}.`;
+
+            const timerInterval = setInterval(() => {
+                remainingSeconds--;
+
+                if (remainingSeconds < 0) {
+                    clearInterval(timerInterval);
+                    audio.play();
+                    alert('De timer van ' + minutes + ' minuten is klaar!');
+                    countdownDisplay.textContent = 'Klaar!';
+                } else {
+                    const displayMinutes = Math.floor(remainingSeconds / 60);
+                    const displaySeconds = remainingSeconds % 60;
+                    
+                    const formattedMinutes = String(displayMinutes).padStart(2, '0');
+                    const formattedSeconds = String(displaySeconds).padStart(2, '0');
+                    
+                    countdownDisplay.textContent = `${formattedMinutes}:${formattedSeconds}`;
+                }
+            }, 1000);
         }
     });
 </script>
