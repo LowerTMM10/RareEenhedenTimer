@@ -126,7 +126,7 @@
                         alert('De timer van ' + minutes + ' minuten is klaar! (Kon geluid niet afspelen)');
                     });
 
-                    countdownDisplay.textContent = 'Klaar!';
+                    countdownDisplay.textContent = '00:00';
                 } else {
                     const displayMinutes = Math.floor(remainingSeconds / 60);
                     const displaySeconds = remainingSeconds % 60;
