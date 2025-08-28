@@ -116,12 +116,12 @@ document.addEventListener('DOMContentLoaded', () => {
       if (remainingSeconds < 0) {
         clearInterval(timerInterval);
 
-        audio.play().then(() => {
-          alert('De timer van ' + minutes + ' minuten is klaar!');
-        }).catch(error => {
-          console.error('Fout bij het afspelen van het geluid:', error);
-          alert('De timer van ' + minutes + ' minuten is klaar! (Kon geluid niet afspelen)');
-        });
+                    audio.play().then(() => {
+                        alert('De timer van ' + minutes + ' minuten is klaar!');
+                    }).catch(error => {
+                        console.error('Fout bij het afspelen van het geluid:', error);
+                        alert('De timer van ' + minutes + ' minuten is klaar! (Kon geluid niet afspelen)');
+                    });
       }
     }, 1000);
   }
