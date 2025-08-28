@@ -52,24 +52,18 @@
             width: 100%;
             height: 100%;
         }
-        #gauge-pointer {
-            position: absolute;
-            left: 50%;
-            bottom: 0;
-            /* Breedte van 400px is 40% van de containerbreedte (1000px) */
-            width: 40%; 
-            /* Hoogte van 50px is 10% van de containerhoogte (500px) */
-            height: 10%;
-            transform-origin: center bottom;
-            transition: transform 1s linear;
-            z-index: 10;
-            /*
-            Dit zorgt ervoor dat de wijzer niet te ver naar de zijkanten gaat.
-            Je kunt dit aanpassen naar de gewenste verhouding.
-            */
-            max-width: 400px;
-            max-height: 50px;
+        #gauge-pointer{
+          position:absolute;
+          left:50%;
+          bottom:0;
+          height:45%;         /* naald-hoogte relatief aan klok */
+          width:auto;         /* behoud aspect ratio van PNG */
+          transform-origin:center bottom;
+          transition: transform 0.2s linear;
+          --angle: 0deg;      /* CSS-variabele voor hoek */
+          transform: rotate(calc(var(--angle) - 90deg)); /* vaste -90° offset in CSS */
         }
+
         button {
             padding: 10px 20px;
             background-color: #6c757d;
@@ -101,66 +95,63 @@
 </div>
 
 <script>
-    document.addEventListener('DOMContentLoaded', (event) => {
-        const soundUrl = 'assets/alarm.mp3'; 
+document.addEventListener('DOMContentLoaded', () => {
+  const soundUrl = 'assets/alarm.mp3';
+  const statusElement = document.getElementById('statusText');
+  const backButton = document.getElementById('back-button');
+  const audio = new Audio(soundUrl);
+  const gaugePointer = document.getElementById('gauge-pointer');
 
-        const statusElement = document.getElementById('statusText');
-        const backButton = document.getElementById('back-button');
-        const audio = new Audio(soundUrl);
-        const gaugePointer = document.getElementById('gauge-pointer');
+  function getCookie(name){
+    const cookieString = document.cookie;
+    const cookies = cookieString.split(';');
+    for (let i = 0; i < cookies.length; i++) {
+      let cookie = cookies[i].trim();
+      if (cookie.startsWith(name + '=')) {
+        return cookie.substring(name.length + 1);
+      }
+    }
+    return null;
+  }
 
-        function getCookie(name) {
-            const cookieString = document.cookie;
-            const cookies = cookieString.split(';');
-            for (let i = 0; i < cookies.length; i++) {
-                let cookie = cookies[i].trim();
-                if (cookie.startsWith(name + '=')) {
-                    return cookie.substring(name.length + 1);
-                }
-            }
-            return null;
-        }
+  const timerDurationValue = getCookie('TimerDuur');
+  const minutes = parseInt(timerDurationValue, 10);
 
-        const timerDurationValue = getCookie('TimerDuur');
-        const minutes = parseInt(timerDurationValue, 10);
+  if (timerDurationValue === null || isNaN(minutes)) {
+    statusElement.textContent = 'Fout: De "TimerDuur" cookie is niet gevonden of is geen geldig getal.';
+    console.error('Cookie "TimerDuur" is niet gevonden of is geen geldig getal.');
+  } else {
+    const totalSeconds = minutes * 60;
+    let remainingSeconds = totalSeconds;
 
-        if (timerDurationValue === null || isNaN(minutes)) {
-            statusElement.textContent = 'Fout: De "TimerDuur" cookie is niet gevonden of is geen geldig getal.';
-            console.error('Cookie "TimerDuur" is niet gevonden of is geen geldig getal.');
-        } else {
-            const totalSeconds = minutes * 60;
-            let remainingSeconds = totalSeconds;
+    statusElement.textContent = `De timer is ingesteld op ${minutes} minuut${minutes === 1 ? '' : 'en'}.`;
 
-            statusElement.textContent = `De timer is ingesteld op ${minutes} minuut${minutes === 1 ? '' : 'en'}.`;
-
-    gaugePointer.style.transform = 'rotate(0deg)';
+    // Start op 0°
+    gaugePointer.style.setProperty('--angle', '0deg');
 
     const timerInterval = setInterval(() => {
-        remainingSeconds--;
+      remainingSeconds--;
 
-        const rotationDegrees = (180 / totalSeconds) * (totalSeconds - remainingSeconds);
-        gaugePointer.style.transform = `rotate(${rotationDegrees}deg)`;
+      const rotationDegrees = (180 / totalSeconds) * (totalSeconds - remainingSeconds);
+      gaugePointer.style.setProperty('--angle', `${rotationDegrees}deg`);
 
-        if (remainingSeconds < 0) {
-            clearInterval(timerInterval);
-        
-            audio.play().then(() => {
-                alert('De timer van ' + minutes + ' minuten is klaar!');
-            }).catch(error => {
-                console.error('Fout bij het afspelen van het geluid:', error);
-                alert('De timer van ' + minutes + ' minuten is klaar! (Kon geluid niet afspelen)');
-            });
+      if (remainingSeconds < 0) {
+        clearInterval(timerInterval);
 
-            statusElement.textContent = 'De timer is klaar!';
-            gaugePointer.style.transform = 'rotate(180deg)';
-        }
-    }, 1000);
-
-
-        backButton.addEventListener('click', () => {
-            window.history.back();
+        audio.play().then(() => {
+          alert('De timer van ' + minutes + ' minuten is klaar!');
+        }).catch(error => {
+          console.error('Fout bij het afspelen van het geluid:', error);
+          alert('De timer van ' + minutes + ' minuten is klaar! (Kon geluid niet afspelen)');
         });
-    });
+
+        statusElement.textContent = 'De timer is klaar!';
+        gaugePointer.style.setProperty('--angle', '180deg');
+      }
+    }, 1000);
+  } // <-- deze sloot je else af; die miste je
+  backButton.addEventListener('click', () => window.history.back());
+});
 </script>
 
 </body>
