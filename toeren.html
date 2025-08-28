@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Toeren Timer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            text-align: center;
+        }
+        .container {
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+        }
+        h1 {
+            color: #007BFF;
+        }
+        .timer-status {
+            font-size: 1.5em;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Timer voor de Toeren</h1>
+    <p>De timer is ingesteld op:</p>
+    <div class="timer-status" id="statusText">Laden...</div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', (event) => {
+        // De URL van het geluidsbestand. Verander dit naar je eigen geluid.
+        // Bijvoorbeeld: 'https://example.com/mijn-geluid.mp3'
+        const soundUrl = 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3'; 
+
+        // Haal het pad van de URL op (bijv. /toeren/10)
+        const path = window.location.pathname;
+        // Splits het pad op bij de slashes en haal het laatste deel op
+        const pathParts = path.split('/');
+        const minutes = parseInt(pathParts[pathParts.length - 1], 10);
+
+        const statusElement = document.getElementById('statusText');
+        const audio = new Audio(soundUrl);
+
+        // Controleer of de minuten een geldig getal zijn
+        if (isNaN(minutes)) {
+            statusElement.textContent = 'Fout: Geen geldig aantal minuten gevonden in de URL.';
+        } else {
+            // Bereken de totale tijd in milliseconden
+            const totalMilliseconds = minutes * 60 * 1000;
+            statusElement.textContent = `${minutes} minuut${minutes === 1 ? '' : 'en'}.`;
+
+            // Stel de timer in
+            setTimeout(() => {
+                // Wanneer de timer is afgelopen:
+                // 1. Speel het geluid af
+                audio.play();
+                
+                // 2. Toon een melding
+                alert('De timer van ' + minutes + ' minuten is klaar!');
+                
+            }, totalMilliseconds);
+        }
+    });
+</script>
+
+</body>
+</html>
