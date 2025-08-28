@@ -128,35 +128,39 @@ document.addEventListener('DOMContentLoaded', () => {
 
   backButton.addEventListener('click', () => window.history.back());
 
-  function createTrain(opposite = false) {
+function createTrain(opposite = false) {
     const img = document.createElement('img');
     img.src = trains[Math.floor(Math.random() * trains.length)];
     img.className = 'train';
     container.appendChild(img);
+
+    // Willekeurige hoogte over het hele scherm
+    const containerHeight = container.clientHeight;
+    const trainHeight = 78; // hoogte van je trein in px
+    const maxTop = containerHeight - trainHeight;
+    const randomTop = Math.random() * maxTop;
+    img.style.top = randomTop + 'px';
 
     // Random snelheid: tussen 5s en 12s
     const speed = 5 + Math.random() * 7;
 
     // Beginpositie
     if (!opposite) {
-        img.style.transform = `translateX(-${img.width + 1000}px)`;
+        img.style.transform = `translateX(-${img.width + 100}px)`; // start links buiten beeld
         setTimeout(() => {
             img.style.transition = `transform ${speed}s linear`;
-            img.style.transform = `translateX(${window.innerWidth + 1000}px)`;
+            img.style.transform = `translateX(${window.innerWidth + 100}px)`; // rijdt naar rechts
         }, 50);
     } else {
-        img.style.transform = `translateX(${window.innerWidth + 1000}px)`;
+        img.style.transform = `translateX(${window.innerWidth + 100}px)`; // start rechts buiten beeld
         setTimeout(() => {
             img.style.transition = `transform ${speed}s linear`;
-            img.style.transform = `translateX(-${img.width + 1000}px)`;
+            img.style.transform = `translateX(-${img.width + 100}px)`; // rijdt naar links
         }, 50);
     }
 
-    // Verwijder uit DOM als hij klaar is
-    img.addEventListener('transitionend', () => {
-      img.remove();
-    });
-  }
+    img.addEventListener('transitionend', () => img.remove());
+}
 });
 </script>
 
