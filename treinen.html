@@ -107,7 +107,7 @@ document.addEventListener('DOMContentLoaded', () => {
       remainingSeconds--;
 
       // 50% kans om een trein te laten verschijnen
-      if (Math.random() < 0.5) {
+      if (Math.random() < 0.25) {
         createTrain();
         // 25% kans dat er nog een trein de andere kant op komt
         if (Math.random() < 0.25) createTrain(true);
@@ -139,17 +139,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Beginpositie
     if (!opposite) {
-      img.style.transform = `translateX(-${img.width}px)`;
-      setTimeout(() => {
-        img.style.transition = `transform ${speed}s linear`;
-        img.style.transform = `translateX(${window.innerWidth}px)`;
-      }, 50);
+        img.style.transform = `translateX(-${img.width + 100}px)`;
+        setTimeout(() => {
+            img.style.transition = `transform ${speed}s linear`;
+            img.style.transform = `translateX(${window.innerWidth + 100}px)`;
+        }, 50);
     } else {
-      img.style.transform = `translateX(${window.innerWidth}px)`;
-      setTimeout(() => {
-        img.style.transition = `transform ${speed}s linear`;
-        img.style.transform = `translateX(-${img.width}px)`;
-      }, 50);
+        img.style.transform = `translateX(${window.innerWidth + 100}px)`;
+        setTimeout(() => {
+            img.style.transition = `transform ${speed}s linear`;
+            img.style.transform = `translateX(-${img.width + 100}px)`;
+        }, 50);
     }
 
     // Verwijder uit DOM als hij klaar is
