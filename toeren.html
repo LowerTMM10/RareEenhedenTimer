@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Toeren Timer</title>
+    <title>Toeren Timer (via Cookie)</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -42,22 +42,35 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', (event) => {
-        // De URL van het geluidsbestand. Verander dit naar je eigen geluid.
-        // Bijvoorbeeld: 'https://example.com/mijn-geluid.mp3'
+        // De URL van het geluidsbestand.
         const soundUrl = 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3'; 
-
-        // Haal het pad van de URL op (bijv. /toeren/10)
-        const path = window.location.pathname;
-        // Splits het pad op bij de slashes en haal het laatste deel op
-        const pathParts = path.split('/');
-        const minutes = parseInt(pathParts[pathParts.length - 1], 10);
 
         const statusElement = document.getElementById('statusText');
         const audio = new Audio(soundUrl);
 
-        // Controleer of de minuten een geldig getal zijn
-        if (isNaN(minutes)) {
-            statusElement.textContent = 'Fout: Geen geldig aantal minuten gevonden in de URL.';
+        // Functie om de waarde van een specifieke cookie op te halen
+        function getCookie(name) {
+            const cookieString = document.cookie;
+            const cookies = cookieString.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                let cookie = cookies[i].trim();
+                // Controleer of de cookie begint met de naam + "="
+                if (cookie.startsWith(name + '=')) {
+                    // Haal de waarde op na de naam en het "=" teken
+                    return cookie.substring(name.length + 1);
+                }
+            }
+            return null; // Geen cookie gevonden
+        }
+
+        // Haal de "TimerDuur" cookie op
+        const timerDurationValue = getCookie('TimerDuur');
+        const minutes = parseInt(timerDurationValue, 10);
+
+        // Controleer of de cookie en de waarde geldig zijn
+        if (timerDurationValue === null || isNaN(minutes)) {
+            statusElement.textContent = 'Fout: De "TimerDuur" cookie is niet gevonden of is geen geldig getal.';
+            console.error('Cookie "TimerDuur" is niet gevonden of is geen geldig getal.');
         } else {
             // Bereken de totale tijd in milliseconden
             const totalMilliseconds = minutes * 60 * 1000;
