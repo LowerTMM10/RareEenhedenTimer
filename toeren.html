@@ -5,11 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Toeren Timer</title>
     <style>
-        @font-face {
-            font-family: '7-segment';
-            src: url('assets/7-segment.ttf') format('truetype');
-        }
-        
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
@@ -39,34 +34,31 @@
             font-size: 1.2em;
             margin-top: 10px;
         }
-        #countdown-display {
-            font-family: '7-segment', sans-serif; 
-            font-size: 3em;
-            font-weight: bold;
-            margin: 20px 0;
-            color: #d9534f;
-        }
         
         /* Stijlen voor de wijzer en de wijzerplaat */
         #gauge-container {
             position: relative;
             width: 300px; 
-            /* Maakt de container vierkant */
-            aspect-ratio: 1 / 1; 
+            /* Maakt de container platter */
+            aspect-ratio: 2 / 1; 
             margin: 20px auto;
             overflow: hidden;
         }
-        #gauge-bg, #gauge-pointer {
+        #gauge-bg {
             position: absolute;
             left: 50%;
             bottom: 0;
             transform: translateX(-50%);
             width: 100%;
-            height: 100%; /* Zorgt dat de afbeelding de container vult */
+            height: 100%;
         }
         #gauge-pointer {
-            width: 10%;
-            height: 80%;
+            position: absolute;
+            left: 50%;
+            bottom: 0;
+            /* De wijzer heeft een verhouding van 1:15 nodig (breedte:hoogte) */
+            width: 20px; 
+            height: 300px; 
             transform-origin: center bottom;
             transition: transform 1s linear;
         }
@@ -91,7 +83,6 @@
 <div class="container">
     <h1>Timer voor de Toeren</h1>
     <p class="timer-status" id="statusText">De timer is ingesteld.</p>
-    <div id="countdown-display">--:--</div>
 
     <div id="gauge-container">
         <img id="gauge-bg" src="https://www.pngkey.com/png/full/233-2332677_image-500580-placeholder-transparent.png" alt="Wijzerplaat">
@@ -106,7 +97,6 @@
         const soundUrl = 'https://github.com/LowerTMM10/RareEenhedenTimer/raw/refs/heads/main/alarm.mp3'; 
 
         const statusElement = document.getElementById('statusText');
-        const countdownDisplay = document.getElementById('countdown-display');
         const backButton = document.getElementById('back-button');
         const audio = new Audio(soundUrl);
         const gaugePointer = document.getElementById('gauge-pointer');
@@ -130,7 +120,6 @@
 
         if (timerDurationValue === null || isNaN(minutes)) {
             statusElement.textContent = 'Fout: De "TimerDuur" cookie is niet gevonden of is geen geldig getal.';
-            countdownDisplay.textContent = 'Fout!';
             console.error('Cookie "TimerDuur" is niet gevonden of is geen geldig getal.');
         } else {
             const totalSeconds = minutes * 60;
@@ -154,16 +143,8 @@
                         alert('De timer van ' + minutes + ' minuten is klaar! (Kon geluid niet afspelen)');
                     });
 
-                    countdownDisplay.textContent = 'Klaar!';
+                    statusElement.textContent = 'De timer is klaar!';
                     gaugePointer.style.transform = 'rotate(90deg)'; 
-                } else {
-                    const displayMinutes = Math.floor(remainingSeconds / 60);
-                    const displaySeconds = remainingSeconds % 60;
-                    
-                    const formattedMinutes = String(displayMinutes).padStart(2, '0');
-                    const formattedSeconds = String(displaySeconds).padStart(2, '0');
-                    
-                    countdownDisplay.textContent = `${formattedMinutes}:${formattedSeconds}`;
                 }
             }, 1000);
         }
