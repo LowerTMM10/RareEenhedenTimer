@@ -5,11 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Toeren Timer</title>
     <style>
+        /* Laad je eigen lettertype */
+        /*
+           Vervang de URL met de link naar jouw font-bestand.
+           Het format moet een van de onderstaande zijn.
+        */
+        @font-face {
+            font-family: '7-segment';
+            src: url('https://github.com/LowerTMM10/RareEenhedenTimer/raw/refs/heads/main/7-segment.ttf') format('truetype');
+            /* Je kunt meerdere formaten toevoegen voor bredere browserondersteuning */
+            /* src: url('https://example.com/pad/naar/jouw-font.woff') format('woff'),
+                   url('https://example.com/pad/naar/jouw-font.ttf') format('truetype'); */
+        }
+        
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
             color: #333;
-            /* Zorgt ervoor dat body het hele scherm vult */
             width: 100vw;
             height: 100vh;
             display: flex;
@@ -24,7 +36,6 @@
             background-color: #fff;
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            /* Zorgt ervoor dat de container de beschikbare ruimte benut */
             max-width: 90%; 
             width: 400px;
         }
@@ -36,6 +47,8 @@
             margin-top: 10px;
         }
         #countdown-display {
+            /* Gebruik hier de naam van je eigen lettertype */
+            font-family: '7-segment', sans-serif; 
             font-size: 3em;
             font-weight: bold;
             margin: 20px 0;
