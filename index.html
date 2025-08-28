@@ -1,1 +1,99 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub JSON Menu</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            margin: auto;
+        }
+        h1 {
+            text-align: center;
+            color: #555;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        select, input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
 
+<div class="container">
+    <h1>GitHub JSON Menu</h1>
+
+    <div class="form-group">
+        <label for="json-data">Selecteer een optie:</label>
+        <select id="json-data">
+            <option value="">Laden...</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="minutes">Aantal minuten:</label>
+        <input type="number" id="minutes" placeholder="Voer het aantal minuten in">
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', (event) => {
+        const dropdown = document.getElementById('json-data');
+        // Vervang deze URL met de link naar jouw ruwe GitHub .json-bestand
+        const githubJsonUrl = 'https://raw.githubusercontent.com/LowerTMM10/RareEenhedenTimer/refs/heads/main/Keuzes.json';
+
+        // Fetch de data van de GitHub URL
+        fetch(githubJsonUrl)
+            .then(response => {
+                // Controleer of de response succesvol is
+                if (!response.ok) {
+                    throw new Error(`HTTP-fout: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Haal de dropdown leeg
+                dropdown.innerHTML = '';
+                
+                // Vul de dropdown met de data
+                // Dit voorbeeld gaat ervan uit dat je een array van strings hebt,
+                // zoals ["optie1", "optie2", "optie3"]
+                // Als je objecten hebt, moet je de code hier aanpassen.
+                data.forEach(item => {
+                    const option = document.createElement('option');
+                    option.value = item;
+                    option.textContent = item;
+                    dropdown.appendChild(option);
+                });
+            })
+            .catch(error => {
+                console.error('Er is een probleem met de fetch-operatie:', error);
+                dropdown.innerHTML = `<option value="">Kon de data niet laden: ${error.message}</option>`;
+            });
+    });
+</script>
+
+</body>
+</html>
