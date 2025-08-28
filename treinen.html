@@ -102,61 +102,58 @@ document.addEventListener('DOMContentLoaded', () => {
 
     statusElement.textContent = `De timer is ingesteld op ${minutes} minuut${minutes === 1 ? '' : 'en'}.`;
 
-    const timerInterval = setInterval(() => {
-      remainingSeconds--;
+ const timerInterval = setInterval(() => {
+  remainingSeconds--;
 
-      // 50% kans om een trein te laten verschijnen
-      if (Math.random() < 0.5) {
-        createTrain();
-        // 25% kans dat er nog een trein de andere kant op komt
-        if (Math.random() < 0.25) createTrain(true);
-      }
+  // 25% kans om een trein te laten verschijnen
+  if (Math.random() < 0.25) {
+    // Spawn trein van links (start half op scherm)
+    createTrain(true); // true = van links
 
-      if (remainingSeconds < 0) {
-        clearInterval(timerInterval);
-
-        audio.play().then(() => {
-          alert('De timer van ' + minutes + ' minuten is klaar!');
-        }).catch(error => {
-          console.error('Fout bij het afspelen van het geluid:', error);
-          alert('De timer van ' + minutes + ' minuten is klaar! (Kon geluid niet afspelen)');
-        });
-      }
-    }, 1000);
+    // 25% kans dat er nog een tegenrijdende trein van rechts komt
+    if (Math.random() < 0.25) createTrain(false);
   }
 
-  backButton.addEventListener('click', () => window.history.back());
+  if (remainingSeconds < 0) {
+    clearInterval(timerInterval);
 
-  function createTrain(opposite = false) {
-    const img = document.createElement('img');
-    img.src = trains[Math.floor(Math.random() * trains.length)];
-    img.className = 'train';
-    container.appendChild(img);
-
-    // Random snelheid: tussen 5s en 12s
-    const speed = 5 + Math.random() * 7;
-
-    // Beginpositie
-    if (!opposite) {
-      img.style.transform = `translateX(-${img.width}px)`;
-      setTimeout(() => {
-        img.style.transition = `transform ${speed}s linear`;
-        img.style.transform = `translateX(${window.innerWidth}px)`;
-      }, 50);
-    } else {
-      img.style.transform = `translateX(${window.innerWidth}px)`;
-      setTimeout(() => {
-        img.style.transition = `transform ${speed}s linear`;
-        img.style.transform = `translateX(-${img.width}px)`;
-      }, 50);
-    }
-
-    // Verwijder uit DOM als hij klaar is
-    img.addEventListener('transitionend', () => {
-      img.remove();
+    audio.play().then(() => {
+      alert('De timer van ' + minutes + ' minuten is klaar!');
+    }).catch(error => {
+      console.error('Fout bij het afspelen van het geluid:', error);
+      alert('De timer van ' + minutes + ' minuten is klaar! (Kon geluid niet afspelen)');
     });
   }
-});
+}, 1000);
+
+function createTrain(fromLeft = false) {
+  const img = document.createElement('img');
+  img.src = trains[Math.floor(Math.random() * trains.length)];
+  img.className = 'train';
+  container.appendChild(img);
+
+  const speed = 5 + Math.random() * 7; // random snelheid
+
+  if (fromLeft) {
+    // start half op scherm (x = -307 px, helft van 607)
+    img.style.transform = `translateX(-${img.width / 2}px)`;
+    setTimeout(() => {
+      img.style.transition = `transform ${speed}s linear`;
+      img.style.transform = `translateX(-${img.width}px)`; // verdwijnt links
+    }, 50);
+  } else {
+    // van rechts zoals eerder
+    img.style.transform = `translateX(${window.innerWidth}px)`;
+    setTimeout(() => {
+      img.style.transition = `transform ${speed}s linear`;
+      img.style.transform = `translateX(-${img.width}px)`; // verdwijnt links van rechts kant
+    }, 50);
+  }
+
+  img.addEventListener('transitionend', () => {
+    img.remove();
+  });
+}
 </script>
 
 </body>
