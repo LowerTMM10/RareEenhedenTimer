@@ -141,7 +141,7 @@
                 remainingSeconds--;
 
                 // Bereken de rotatie van de wijzer
-                const rotationDegrees = (180 / totalSeconds) * (totalSeconds - remainingSeconds);
+                const rotationDegrees = (180 / totalSeconds) * (totalSeconds - remainingSeconds) - 90;
                 gaugePointer.style.transform = `rotate(${rotationDegrees}deg)`;
 
                 if (remainingSeconds < 0) {
