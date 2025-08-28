@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="nl">
 <head>
@@ -6,17 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Toeren Timer</title>
     <style>
-        /* Laad je eigen lettertype */
-        /*
-           Vervang de URL met de link naar jouw font-bestand.
-           Het format moet een van de onderstaande zijn.
-        */
         @font-face {
             font-family: '7-segment';
             src: url('assets/7-segment.ttf') format('truetype');
-            /* Je kunt meerdere formaten toevoegen voor bredere browserondersteuning */
-            /* src: url('https://example.com/pad/naar/jouw-font.woff') format('woff'),
-                   url('https://example.com/pad/naar/jouw-font.ttf') format('truetype'); */
         }
         
         body {
@@ -31,6 +22,7 @@
             align-items: center;
             margin: 0;
             text-align: center;
+            overflow: hidden; /* Voorkomt scrollen als het element te groot is */
         }
         .container {
             padding: 20px;
@@ -48,12 +40,36 @@
             margin-top: 10px;
         }
         #countdown-display {
-            /* Gebruik hier de naam van je eigen lettertype */
             font-family: '7-segment', sans-serif; 
             font-size: 3em;
             font-weight: bold;
             margin: 20px 0;
             color: #d9534f;
+        }
+        /* Stijlen voor de wijzer en de wijzerplaat */
+        #gauge-container {
+            position: relative;
+            width: 300px; /* Pas de grootte aan naar wens */
+            height: 150px; /* Helft van de hoogte voor een half cirkelvormige meter */
+            margin: 20px auto;
+            overflow: hidden; /* Verbergt de buitenste delen van de cirkel */
+        }
+        #gauge-bg, #gauge-pointer {
+            position: absolute;
+            left: 50%;
+            bottom: 0;
+            transform: translateX(-50%);
+            transform-origin: center bottom; /* Zorg ervoor dat de wijzer vanuit de basis roteert */
+        }
+        #gauge-bg {
+            width: 100%;
+            height: 200%; /* Maakt een volledige cirkel die deels verborgen is */
+        }
+        #gauge-pointer {
+            width: 10%; /* Pas de breedte aan */
+            height: 80%; /* Pas de lengte aan */
+            transform: rotate(0deg); /* Startpositie: 0 graden */
+            transition: transform 1s linear; /* Vloeiende overgang van de rotatie */
         }
         button {
             padding: 10px 20px;
@@ -77,17 +93,24 @@
     <h1>Timer voor de Toeren</h1>
     <p class="timer-status" id="statusText">De timer is ingesteld.</p>
     <div id="countdown-display">--:--</div>
+
+    <div id="gauge-container">
+        <img id="gauge-bg" src="https://www.pngkey.com/png/full/233-2332677_image-500580-placeholder-transparent.png" alt="Wijzerplaat">
+        <img id="gauge-pointer" src="https://www.pngkey.com/png/full/233-2332677_image-500580-placeholder-transparent.png" alt="Wijzer">
+    </div>
+
     <button id="back-button">Terug</button>
 </div>
 
 <script>
     document.addEventListener('DOMContentLoaded', (event) => {
-        const soundUrl = 'assets/alarm.mp3'; 
+        const soundUrl = 'https://github.com/LowerTMM10/RareEenhedenTimer/raw/refs/heads/main/alarm.mp3'; 
 
         const statusElement = document.getElementById('statusText');
         const countdownDisplay = document.getElementById('countdown-display');
         const backButton = document.getElementById('back-button');
         const audio = new Audio(soundUrl);
+        const gaugePointer = document.getElementById('gauge-pointer');
 
         function getCookie(name) {
             const cookieString = document.cookie;
@@ -117,6 +140,10 @@
             const timerInterval = setInterval(() => {
                 remainingSeconds--;
 
+                // Bereken de rotatie van de wijzer
+                const rotationDegrees = (180 / totalSeconds) * (totalSeconds - remainingSeconds);
+                gaugePointer.style.transform = `rotate(${rotationDegrees}deg)`;
+
                 if (remainingSeconds < 0) {
                     clearInterval(timerInterval);
                     
@@ -127,7 +154,8 @@
                         alert('De timer van ' + minutes + ' minuten is klaar! (Kon geluid niet afspelen)');
                     });
 
-                    countdownDisplay.textContent = '00:00';
+                    countdownDisplay.textContent = 'Klaar!';
+                    gaugePointer.style.transform = 'rotate(180deg)'; // Zorg ervoor dat de wijzer op 180 graden eindigt
                 } else {
                     const displayMinutes = Math.floor(remainingSeconds / 60);
                     const displaySeconds = remainingSeconds % 60;
