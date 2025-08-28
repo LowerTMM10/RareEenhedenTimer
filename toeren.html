@@ -37,6 +37,20 @@
             margin: 20px 0;
             color: #d9534f;
         }
+        button {
+            padding: 10px 20px;
+            background-color: #6c757d;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 20px;
+        }
+        button:hover {
+            background-color: #5a6268;
+        }
     </style>
 </head>
 <body>
@@ -45,6 +59,7 @@
     <h1>Timer voor de Toeren</h1>
     <p class="timer-status" id="statusText">De timer is ingesteld.</p>
     <div id="countdown-display">--:--</div>
+    <button id="back-button">Terug</button>
 </div>
 
 <script>
@@ -53,6 +68,7 @@
 
         const statusElement = document.getElementById('statusText');
         const countdownDisplay = document.getElementById('countdown-display');
+        const backButton = document.getElementById('back-button');
         const audio = new Audio(soundUrl);
 
         function getCookie(name) {
@@ -86,12 +102,10 @@
                 if (remainingSeconds < 0) {
                     clearInterval(timerInterval);
                     
-                    // Speel het geluid eerst af, en toon daarna pas de melding
                     audio.play().then(() => {
                         alert('De timer van ' + minutes + ' minuten is klaar!');
                     }).catch(error => {
                         console.error('Fout bij het afspelen van het geluid:', error);
-                        // Toon de melding als het geluid niet kon worden afgespeeld
                         alert('De timer van ' + minutes + ' minuten is klaar! (Kon geluid niet afspelen)');
                     });
 
@@ -107,6 +121,11 @@
                 }
             }, 1000);
         }
+
+        // Event listener voor de Terug-knop
+        backButton.addEventListener('click', () => {
+            window.history.back();
+        });
     });
 </script>
 
