@@ -136,12 +136,12 @@ const timerInterval = setInterval(() => {
   } else {
     clearInterval(timerInterval);
 
-    audio.play().then(() => {
-      alert('De timer van ' + minutes + ' minuten is klaar!');
-    }).catch(error => {
-      console.error('Fout bij het afspelen van het geluid:', error);
-      alert('De timer van ' + minutes + ' minuten is klaar! (Kon geluid niet afspelen)');
-    });
+                    audio.play().then(() => {
+                        alert('De timer van ' + minutes + ' minuten is klaar!');
+                    }).catch(error => {
+                        console.error('Fout bij het afspelen van het geluid:', error);
+                        alert('De timer van ' + minutes + ' minuten is klaar! (Kon geluid niet afspelen)');
+                    });
 
     statusElement.textContent = 'De timer is klaar!';
     gaugePointer.style.setProperty('--angle', '180deg'); // eindpositie
