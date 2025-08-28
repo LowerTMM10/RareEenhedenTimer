@@ -97,11 +97,10 @@
                 
                 // Vul de dropdown met de data
                 data.forEach(item => {
+                    const firstWord = item.split(' ')[0]; // Haal het eerste woord op
                     const option = document.createElement('option');
-                    // De tekst die de gebruiker ziet
-                    option.textContent = item; 
-                    // De waarde die wordt gebruikt in de URL, met spaties vervangen door underscores
-                    option.value = item.replace(/ /g, '_'); 
+                    option.textContent = item; // Volledige tekst zichtbaar in de dropdown
+                    option.value = firstWord; // Alleen het eerste woord in de waarde voor de URL
                     dropdown.appendChild(option);
                 });
             })
@@ -112,10 +111,9 @@
 
         // Event listener voor de knop
         redirectButton.addEventListener('click', () => {
-            const selectedOptionValue = dropdown.value; // Dit is nu de waarde met underscores
+            const selectedOptionValue = dropdown.value; // Dit is nu het eerste woord
             const minutes = minutesInput.value;
 
-            // Controleer of er een optie is geselecteerd en of er minuten zijn ingevoerd
             if (selectedOptionValue && minutes) {
                 // Maak de URL aan en stuur de gebruiker door
                 const url = `https://rare-timer.netlify.app/${selectedOptionValue}/${minutes}`;
