@@ -1,81 +1,163 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Normale timer met treinen</title>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+  color: #333;
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.container {
+  width: 100%;
+  height: 100%;
+  padding: 20px;
+  background-color: #fff;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+h1 {
+  color: #007BFF;
+}
+
+.timer-status {
+  font-size: 1.2em;
+  margin-top: 10px;
+}
+
+button {
+  padding: 10px 20px;
+  background-color: #6c757d;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 20px;
+}
+button:hover {
+  background-color: #5a6268;
+}
+
+.train {
+  position: absolute;
+  width: 607px;
+  height: 78px;
+  top: 70%;
+  transition: transform linear;
+}
+</style>
+</head>
+<body>
+
 <div class="container">
-    <h1>Normale timer</h1>
-    <p class="timer-status" id="statusText">De timer is ingesteld.</p>
-    <button id="back-button">Terug</button>
-    <!-- Random trein -->
-    <img id="train" src="" alt="Trein" style="position:absolute; top:70%; left:-607px; width:607px; height:78px; display:none;">
+  <h1>Normale timer</h1>
+  <p class="timer-status" id="statusText">De timer is ingesteld.</p>
+  <button id="back-button">Terug</button>
 </div>
 
 <script>
-document.addEventListener('DOMContentLoaded', (event) => {
-    const soundUrl = 'assets/alarm.mp3'; 
-    const statusElement = document.getElementById('statusText');
-    const backButton = document.getElementById('back-button');
-    const audio = new Audio(soundUrl);
-    const train = document.getElementById('train');
+document.addEventListener('DOMContentLoaded', () => {
+  const soundUrl = 'assets/alarm.mp3'; 
+  const statusElement = document.getElementById('statusText');
+  const backButton = document.getElementById('back-button');
+  const audio = new Audio(soundUrl);
 
-    const trains = ['assets/virm.png', 'assets/icng.png', 'assets/icm.png'];
+  const trains = ['assets/virm.png', 'assets/icng.png', 'assets/icm.png'];
+  const container = document.querySelector('.container');
 
-    function getCookie(name) {
-        const cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-            let cookie = cookies[i].trim();
-            if (cookie.startsWith(name + '=')) {
-                return cookie.substring(name.length + 1);
-            }
-        }
-        return null;
+  function getCookie(name) {
+    const cookies = document.cookie.split(';');
+    for (let i = 0; i < cookies.length; i++) {
+      let cookie = cookies[i].trim();
+      if (cookie.startsWith(name + '=')) return cookie.substring(name.length + 1);
     }
+    return null;
+  }
 
-    const timerDurationValue = getCookie('TimerDuur');
-    const minutes = parseInt(timerDurationValue, 10);
+  const timerDurationValue = getCookie('TimerDuur');
+  const minutes = parseInt(timerDurationValue, 10);
 
-    if (timerDurationValue === null || isNaN(minutes)) {
-        statusElement.textContent = 'Fout: De "TimerDuur" cookie is niet gevonden of is geen geldig getal.';
-        console.error('Cookie "TimerDuur" is niet gevonden of is geen geldig getal.');
+  if (timerDurationValue === null || isNaN(minutes)) {
+    statusElement.textContent = 'Fout: De "TimerDuur" cookie is niet gevonden of is geen geldig getal.';
+    console.error('Cookie "TimerDuur" is niet gevonden of is geen geldig getal.');
+  } else {
+    const totalSeconds = minutes * 60;
+    let remainingSeconds = totalSeconds;
+
+    statusElement.textContent = `De timer is ingesteld op ${minutes} minuut${minutes === 1 ? '' : 'en'}.`;
+
+    const timerInterval = setInterval(() => {
+      remainingSeconds--;
+
+      // 50% kans om een trein te laten verschijnen
+      if (Math.random() < 0.5) {
+        createTrain();
+        // 25% kans dat er nog een trein de andere kant op komt
+        if (Math.random() < 0.25) createTrain(true);
+      }
+
+      if (remainingSeconds < 0) {
+        clearInterval(timerInterval);
+
+        audio.play().then(() => {
+          alert('De timer van ' + minutes + ' minuten is klaar!');
+        }).catch(error => {
+          console.error('Fout bij het afspelen van het geluid:', error);
+          alert('De timer van ' + minutes + ' minuten is klaar! (Kon geluid niet afspelen)');
+        });
+      }
+    }, 1000);
+  }
+
+  backButton.addEventListener('click', () => window.history.back());
+
+  function createTrain(opposite = false) {
+    const img = document.createElement('img');
+    img.src = trains[Math.floor(Math.random() * trains.length)];
+    img.className = 'train';
+    container.appendChild(img);
+
+    // Random snelheid: tussen 5s en 12s
+    const speed = 5 + Math.random() * 7;
+
+    // Beginpositie
+    if (!opposite) {
+      img.style.transform = `translateX(-${img.width}px)`;
+      setTimeout(() => {
+        img.style.transition = `transform ${speed}s linear`;
+        img.style.transform = `translateX(${window.innerWidth}px)`;
+      }, 50);
     } else {
-        const totalSeconds = minutes * 60;
-        let remainingSeconds = totalSeconds;
-
-        statusElement.textContent = `De timer is ingesteld op ${minutes} minuut${minutes === 1 ? '' : 'en'}.`;
-
-        const timerInterval = setInterval(() => {
-            remainingSeconds--;
-
-            // Willekeurige trein laten verschijnen met 10% kans per seconde
-            if (Math.random() < 0.1) {
-                const randomTrain = trains[Math.floor(Math.random() * trains.length)];
-                train.src = randomTrain;
-                train.style.left = '-607px';
-                train.style.display = 'block';
-
-                let trainPos = -607;
-                const trainInterval = setInterval(() => {
-                    trainPos += 10; // snelheid van de trein
-                    train.style.left = trainPos + 'px';
-                    if (trainPos > window.innerWidth) {
-                        clearInterval(trainInterval);
-                        train.style.display = 'none';
-                    }
-                }, 20);
-            }
-
-            if (remainingSeconds < 0) {
-                clearInterval(timerInterval);
-                
-                audio.play().then(() => {
-                    alert('De timer van ' + minutes + ' minuten is klaar!');
-                }).catch(error => {
-                    console.error('Fout bij het afspelen van het geluid:', error);
-                    alert('De timer van ' + minutes + ' minuten is klaar! (Kon geluid niet afspelen)');
-                });
-
-            }
-        }, 1000);
+      img.style.transform = `translateX(${window.innerWidth}px)`;
+      setTimeout(() => {
+        img.style.transition = `transform ${speed}s linear`;
+        img.style.transform = `translateX(-${img.width}px)`;
+      }, 50);
     }
 
-    backButton.addEventListener('click', () => {
-        window.history.back();
+    // Verwijder uit DOM als hij klaar is
+    img.addEventListener('transitionend', () => {
+      img.remove();
     });
+  }
 });
 </script>
+
+</body>
+</html>
