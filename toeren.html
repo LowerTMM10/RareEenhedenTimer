@@ -49,14 +49,12 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', (event) => {
-        // De URL van het geluidsbestand, zoals jij hebt aangegeven
         const soundUrl = 'https://github.com/LowerTMM10/RareEenhedenTimer/raw/refs/heads/main/alarm.mp3'; 
 
         const statusElement = document.getElementById('statusText');
         const countdownDisplay = document.getElementById('countdown-display');
         const audio = new Audio(soundUrl);
 
-        // Functie om de waarde van een specifieke cookie op te halen
         function getCookie(name) {
             const cookieString = document.cookie;
             const cookies = cookieString.split(';');
@@ -69,7 +67,6 @@
             return null;
         }
 
-        // Haal de "TimerDuur" cookie op
         const timerDurationValue = getCookie('TimerDuur');
         const minutes = parseInt(timerDurationValue, 10);
 
@@ -88,8 +85,16 @@
 
                 if (remainingSeconds < 0) {
                     clearInterval(timerInterval);
-                    audio.play();
-                    alert('De timer van ' + minutes + ' minuten is klaar!');
+                    
+                    // Speel het geluid eerst af, en toon daarna pas de melding
+                    audio.play().then(() => {
+                        alert('De timer van ' + minutes + ' minuten is klaar!');
+                    }).catch(error => {
+                        console.error('Fout bij het afspelen van het geluid:', error);
+                        // Toon de melding als het geluid niet kon worden afgespeeld
+                        alert('De timer van ' + minutes + ' minuten is klaar! (Kon geluid niet afspelen)');
+                    });
+
                     countdownDisplay.textContent = 'Klaar!';
                 } else {
                     const displayMinutes = Math.floor(remainingSeconds / 60);
