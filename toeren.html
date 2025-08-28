@@ -36,35 +36,30 @@
         }
         
         /* Stijlen voor de wijzer en de wijzerplaat */
-        #gauge-container {
-            position: relative;
-            /* De breedte is 1000px en de hoogte 500px (verhouding 2:1) */
-            width: 1000px; 
-            height: 500px;
-            margin: 20px auto;
-            overflow: hidden;
-        }
-        #gauge-bg {
-          position: absolute;
-          left: 0;
-          bottom: 0;
-          width: 100%;
-          height: 100%;
-          object-fit: contain;  /* afbeelding blijft binnen container */
-        }
+#gauge-container {
+  position: relative;
+  margin: 20px auto;
+  display: inline-block;   /* container krimpt mee met de bg-afbeelding */
+}
 
+#gauge-bg {
+  display: block;
+  width: 100%; 
+  height: auto;            /* behoudt juiste verhoudingen */
+}
 
-        #gauge-pointer{
-          position:absolute;
-          left:50%;
-          bottom:0;
-          height:45%;         /* naald-hoogte relatief aan klok */
-          width:auto;         /* behoud aspect ratio van PNG */
-          transform-origin:center bottom;
-          transition: transform 0.2s linear;
-          --angle: 0deg;      /* CSS-variabele voor hoek */
-          transform: rotate(calc(var(--angle) - 90deg)); /* vaste -90° offset in CSS */
-        }
+#gauge-pointer {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  height: 45%;             /* naaldhoogte t.o.v. container */
+  width: auto;
+  transform-origin: center bottom;
+  transition: transform 0.2s linear;
+  --angle: 0deg;
+  transform: rotate(calc(var(--angle) - 90deg));
+}
+
 
         button {
             padding: 10px 20px;
