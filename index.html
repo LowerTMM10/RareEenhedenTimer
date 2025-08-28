@@ -82,7 +82,6 @@
         const minutesInput = document.getElementById('minutes');
         const redirectButton = document.getElementById('redirect-button');
         
-        // De door jou opgegeven GitHub URL
         const githubJsonUrl = 'https://raw.githubusercontent.com/LowerTMM10/RareEenhedenTimer/refs/heads/main/Keuzes.json';
 
         // Fetch de data van de GitHub URL
@@ -97,11 +96,12 @@
                 dropdown.innerHTML = '';
                 
                 // Vul de dropdown met de data
-                // Dit voorbeeld gaat ervan uit dat het een array van strings is.
                 data.forEach(item => {
                     const option = document.createElement('option');
-                    option.value = item;
-                    option.textContent = item;
+                    // De tekst die de gebruiker ziet
+                    option.textContent = item; 
+                    // De waarde die wordt gebruikt in de URL, met spaties vervangen door underscores
+                    option.value = item.replace(/ /g, '_'); 
                     dropdown.appendChild(option);
                 });
             })
@@ -112,13 +112,13 @@
 
         // Event listener voor de knop
         redirectButton.addEventListener('click', () => {
-            const selectedOption = dropdown.value;
+            const selectedOptionValue = dropdown.value; // Dit is nu de waarde met underscores
             const minutes = minutesInput.value;
 
             // Controleer of er een optie is geselecteerd en of er minuten zijn ingevoerd
-            if (selectedOption && minutes) {
+            if (selectedOptionValue && minutes) {
                 // Maak de URL aan en stuur de gebruiker door
-                const url = `https://rare-timer.netlify.app/${selectedOption}/${minutes}`;
+                const url = `https://rare-timer.netlify.app/${selectedOptionValue}/${minutes}`;
                 window.location.href = url;
             } else {
                 alert('Selecteer een optie en voer het aantal minuten in.');
