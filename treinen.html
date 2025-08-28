@@ -139,16 +139,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Beginpositie
     if (!opposite) {
-        img.style.transform = `translateX(-${img.width + 100}px)`;
+        img.style.transform = `translateX(-${img.width + 1000}px)`;
         setTimeout(() => {
             img.style.transition = `transform ${speed}s linear`;
-            img.style.transform = `translateX(${window.innerWidth + 100}px)`;
+            img.style.transform = `translateX(${window.innerWidth + 1000}px)`;
         }, 50);
     } else {
-        img.style.transform = `translateX(${window.innerWidth + 100}px)`;
+        img.style.transform = `translateX(${window.innerWidth + 1000}px)`;
         setTimeout(() => {
             img.style.transition = `transform ${speed}s linear`;
-            img.style.transform = `translateX(-${img.width + 100}px)`;
+            img.style.transform = `translateX(-${img.width + 1000}px)`;
         }, 50);
     }
 
