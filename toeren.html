@@ -56,12 +56,19 @@
             position: absolute;
             left: 50%;
             bottom: 0;
-            /* De wijzer is 400px breed en 50px hoog */
-            width: 400px; 
-            height: 50px;
+            /* Breedte van 400px is 40% van de containerbreedte (1000px) */
+            width: 40%; 
+            /* Hoogte van 50px is 10% van de containerhoogte (500px) */
+            height: 10%;
             transform-origin: center bottom;
             transition: transform 1s linear;
             z-index: 10;
+            /*
+            Dit zorgt ervoor dat de wijzer niet te ver naar de zijkanten gaat.
+            Je kunt dit aanpassen naar de gewenste verhouding.
+            */
+            max-width: 400px;
+            max-height: 50px;
         }
         button {
             padding: 10px 20px;
