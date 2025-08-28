@@ -2,7 +2,7 @@
 <html lang="nl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-schaal=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Toeren Timer</title>
     <style>
         body {
@@ -55,13 +55,12 @@
             position: absolute;
             left: 50%;
             bottom: 0;
-            /* De wijzer is nu de helft van de breedte van de container */
             width: 50%; 
-            /* En de hoogte is gebaseerd op de breedte van de wijzer */
             height: 25%;
+            /* Zorgt dat de wijzer roteert vanaf het midden van de onderkant */
             transform-origin: center bottom;
             transition: transform 1s linear;
-            z-index: 10; /* Zorgt dat de wijzer boven de achtergrond is */
+            z-index: 10;
         }
         button {
             padding: 10px 20px;
@@ -102,6 +101,7 @@
         const audio = new Audio(soundUrl);
         const gaugePointer = document.getElementById('gauge-pointer');
 
+        // Stel de startrotatie in op -90 graden
         gaugePointer.style.transform = 'rotate(-90deg)';
 
         function getCookie(name) {
