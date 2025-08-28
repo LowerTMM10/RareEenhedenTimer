@@ -38,6 +38,20 @@
             border-radius: 4px;
             box-sizing: border-box;
         }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
     </style>
 </head>
 <body>
@@ -56,31 +70,34 @@
         <label for="minutes">Aantal minuten:</label>
         <input type="number" id="minutes" placeholder="Voer het aantal minuten in">
     </div>
+
+    <div class="form-group">
+        <button id="redirect-button">Ga naar de timer</button>
+    </div>
 </div>
 
 <script>
     document.addEventListener('DOMContentLoaded', (event) => {
         const dropdown = document.getElementById('json-data');
-        // Vervang deze URL met de link naar jouw ruwe GitHub .json-bestand
+        const minutesInput = document.getElementById('minutes');
+        const redirectButton = document.getElementById('redirect-button');
+        
+        // De door jou opgegeven GitHub URL
         const githubJsonUrl = 'https://raw.githubusercontent.com/LowerTMM10/RareEenhedenTimer/refs/heads/main/Keuzes.json';
 
         // Fetch de data van de GitHub URL
         fetch(githubJsonUrl)
             .then(response => {
-                // Controleer of de response succesvol is
                 if (!response.ok) {
                     throw new Error(`HTTP-fout: ${response.status}`);
                 }
                 return response.json();
             })
             .then(data => {
-                // Haal de dropdown leeg
                 dropdown.innerHTML = '';
                 
                 // Vul de dropdown met de data
-                // Dit voorbeeld gaat ervan uit dat je een array van strings hebt,
-                // zoals ["optie1", "optie2", "optie3"]
-                // Als je objecten hebt, moet je de code hier aanpassen.
+                // Dit voorbeeld gaat ervan uit dat het een array van strings is.
                 data.forEach(item => {
                     const option = document.createElement('option');
                     option.value = item;
@@ -92,6 +109,21 @@
                 console.error('Er is een probleem met de fetch-operatie:', error);
                 dropdown.innerHTML = `<option value="">Kon de data niet laden: ${error.message}</option>`;
             });
+
+        // Event listener voor de knop
+        redirectButton.addEventListener('click', () => {
+            const selectedOption = dropdown.value;
+            const minutes = minutesInput.value;
+
+            // Controleer of er een optie is geselecteerd en of er minuten zijn ingevoerd
+            if (selectedOption && minutes) {
+                // Maak de URL aan en stuur de gebruiker door
+                const url = `https://rare-timer.netlify.app/${selectedOption}/${minutes}`;
+                window.location.href = url;
+            } else {
+                alert('Selecteer een optie en voer het aantal minuten in.');
+            }
+        });
     });
 </script>
 
