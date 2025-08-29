@@ -107,10 +107,11 @@ document.addEventListener('DOMContentLoaded', () => {
       remainingSeconds--;
 
       // 50% kans om een trein te laten verschijnen
-      if (Math.random() < 0.25) {
+      if (Math.random() < 0.125) {
         createTrain();
-        // 25% kans dat er nog een trein de andere kant op komt
-        if (Math.random() < 0.25) createTrain(true);
+      }
+      if (Math.random() < 0.125) {
+        createTrain(true);
       }
 
       if (remainingSeconds < 0) {
@@ -146,16 +147,16 @@ function createTrain(opposite = false) {
 
     // Beginpositie
     if (!opposite) {
-        img.style.transform = `translateX(-${img.width + 100}px)`; // start links buiten beeld
+        img.style.transform = `translateX(-${img.width + 500}px)`; // start links buiten beeld
         setTimeout(() => {
             img.style.transition = `transform ${speed}s linear`;
-            img.style.transform = `translateX(${window.innerWidth + 100}px)`; // rijdt naar rechts
+            img.style.transform = `translateX(${window.innerWidth + 500}px)`; // rijdt naar rechts
         }, 50);
     } else {
-        img.style.transform = `translateX(${window.innerWidth + 100}px)`; // start rechts buiten beeld
+        img.style.transform = `translateX(${window.innerWidth + 500}px)`; // start rechts buiten beeld
         setTimeout(() => {
             img.style.transition = `transform ${speed}s linear`;
-            img.style.transform = `translateX(-${img.width + 100}px)`; // rijdt naar links
+            img.style.transform = `translateX(-${img.width + 500}px)`; // rijdt naar links
         }, 50);
     }
 
