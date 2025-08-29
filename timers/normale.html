@@ -112,7 +112,7 @@
             const totalSeconds = minutes * 60;
             let remainingSeconds = totalSeconds;
 
-            statusElement.textContent = `De timer is ingesteld op ${minutes} minuut${minutes === 1 ? '' : 'en'}.`;
+            statusElement.textContent = `De timer is ingesteld op ${minutes} minuten.`;
 
             const timerInterval = setInterval(() => {
                 remainingSeconds--;
