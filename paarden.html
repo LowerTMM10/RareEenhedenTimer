@@ -133,25 +133,30 @@ function createTrain(opposite = false) {
     container.appendChild(img);
 
 // Willekeurige hoogte over het hele scherm
+// Haal de afmetingen van de container op
+const containerWidth = container.clientWidth;
 const containerHeight = container.clientHeight;
 
-// Stel een minimum en maximum grootte vast voor je treinen
-const minHeight = 90; // minimum hoogte in px
-const maxHeight = 100; // maximum hoogte in px
+// Bepaal de verhouding van de afbeelding
+const originalWidth = img.naturalWidth;
+const originalHeight = img.naturalHeight;
+const originalRatio = originalWidth / originalHeight;
 
-    const originalWidth = img.naturalWidth;
-    const originalHeight = img.naturalHeight;
+// Stel een maximum breedte vast, zodat de trein nooit breder is dan de container
+const maxWidth = containerWidth;
 
-    // Bereken de verhouding van deze afbeelding
-    const originalRatio = originalWidth / originalHeight;
+// Bereken de maximum hoogte op basis van de maximum breedte en de verhouding
+const maxHeight = maxWidth / originalRatio;
+const minHeight = 90; // Je kunt hier je eigen minimum hoogte instellen
 
 // Genereer een willekeurige hoogte binnen de vastgestelde grenzen
-const randomHeight = Math.random() * (maxHeight - minHeight) + minHeight;
+// Deze 'randomHeight' zal nooit te groot zijn om buiten de container te komen
+const randomHeight = Math.random() * (Math.min(maxHeight, 100) - minHeight) + minHeight;
 
 // Bereken de bijbehorende breedte om de verhouding te behouden
 const newWidth = randomHeight * originalRatio;
 
-// Zorg ervoor dat de trein niet buiten het scherm valt, zowel verticaal als horizontaal
+// Zorg ervoor dat de trein binnen de verticale grenzen blijft
 const maxTop = containerHeight - randomHeight;
 const randomTop = Math.random() * maxTop;
 
