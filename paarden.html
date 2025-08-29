@@ -139,8 +139,11 @@ const containerHeight = container.clientHeight;
 const minHeight = 90; // minimum hoogte in px
 const maxHeight = 100; // maximum hoogte in px
 
-// Bepaal de originele verhouding van je treinafbeelding (breedte / hoogte)
-const originalRatio = 4;
+    const originalWidth = img.naturalWidth;
+    const originalHeight = img.naturalHeight;
+
+    // Bereken de verhouding van deze afbeelding
+    const originalRatio = originalWidth / originalHeight;
 
 // Genereer een willekeurige hoogte binnen de vastgestelde grenzen
 const randomHeight = Math.random() * (maxHeight - minHeight) + minHeight;
