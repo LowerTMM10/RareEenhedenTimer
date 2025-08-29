@@ -67,7 +67,6 @@ button:hover {
 <script>
 document.addEventListener('DOMContentLoaded', () => {
     const alarmSound = new Audio('assets/alarm.mp3'); 
-    const yaySound = new Audio('assets/yay.mp3'); 
     const statusElement = document.getElementById('statusText');
     const backButton = document.getElementById('back-button');
     let yayTimeoutId;
@@ -117,37 +116,37 @@ document.addEventListener('DOMContentLoaded', () => {
         const elapsedTime = (Date.now() - startTime) / 1000;
         
         // Zorg dat de geluidslus stopt als de timer op is
-        if (elapsedTime >= totalSeconds - 0.1) { // Stop iets eerder
+        if (elapsedTime >= totalSeconds - 0.1) {
             return;
         }
         
         // Bepaal de vertraging per fase
         let yayDelay;
         if (remainingSeconds > 30) {
-            // Fase 1: Geen yay-geluid
-            yayDelay = 30000; // Een heel lange pauze
+            yayDelay = 30000;
         } else if (remainingSeconds > 1) {
-            // Fase 2: Lineaire versnelling van 1 yay/s naar 5 yays/s
-            const startNode = 30; // seconden
-            const endNode = 1; // seconden
+            const startNode = 30;
+            const endNode = 1;
             const totalSegmentTime = startNode - endNode;
             const timeInSegment = startNode - remainingSeconds;
             const segmentProgress = timeInSegment / totalSegmentTime;
 
-            const startDelay = 1000; // 1 yay/s
-            const endDelay = 200; // 5 yays/s
+            const startDelay = 1000;
+            const endDelay = 200;
             yayDelay = startDelay - (startDelay - endDelay) * segmentProgress;
         } else {
-            // Fase 3: De laatste seconde, versnelling naar het einde
-            const startDelay = 200; // 5 yays/s
-            const endDelay = 50; // Snelst
+            const startDelay = 200;
+            const endDelay = 50;
             const timeInSegment = 1 - remainingSeconds;
             const segmentProgress = timeInSegment;
-
             yayDelay = startDelay - (startDelay - endDelay) * segmentProgress;
         }
 
-        yaySound.play();
+        // --- De belangrijke aanpassing is hier: ---
+        // Maak een nieuwe Audio instantie voor elke keer dat het geluid afspeelt
+        const yaySoundInstance = new Audio('assets/yay.mp3');
+        yaySoundInstance.play();
+
         yayTimeoutId = setTimeout(playYaySound, yayDelay);
     }
     
