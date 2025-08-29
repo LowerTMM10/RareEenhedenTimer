@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Timer met geluid</title>
+<title>Dynamische Timer</title>
 <style>
 body {
   font-family: Arial, sans-serif;
@@ -87,47 +87,57 @@ document.addEventListener('DOMContentLoaded', () => {
     if (timerDurationValue === null || isNaN(minutes)) {
         statusElement.textContent = 'Fout: De "TimerDuur" cookie is niet gevonden of is geen geldig getal.';
         console.error('Cookie "TimerDuur" is niet gevonden of is geen geldig getal.');
-        return; // Stop de scriptuitvoering
+        return;
     } 
     
     const totalSeconds = minutes * 60;
     let remainingSeconds = totalSeconds;
-    
-    // Functie voor de timer en het geluid
-    function updateTimer() {
-        remainingSeconds--;
-        
-        // Bereken de voortgang van de timer (0.0 aan het begin, 1.0 aan het einde)
-        const progress = 1 - (remainingSeconds / totalSeconds);
-        
-        // Verhoog de kans dat het 'yay'-geluid verschijnt
-        const yayChance = 0.1 + 0.9 * progress;
-        
-        if (remainingSeconds >= 0) {
-            // Speel 'yay'-geluid met toenemende frequentie
-            if (Math.random() < yayChance) {
-                yaySound.play();
-            }
+    let startTime = Date.now();
 
-            // Update de status-tekst
-            const displayMinutes = Math.floor(remainingSeconds / 60);
-            const displaySeconds = remainingSeconds % 60;
-            const paddedSeconds = displaySeconds.toString().padStart(2, '0');
-            statusElement.textContent = `Nog ${displayMinutes}:${paddedSeconds} te gaan!`;
-            
-            // Loop de functie na een kortere of langere pauze
-            const newDelay = 1000 - 800 * progress; // Vanaf 1000ms naar 200ms
-            setTimeout(updateTimer, newDelay);
-        } else {
-            // Timer is klaar
+    // Functie voor de timer-weergave
+    function updateTimer() {
+        if (remainingSeconds < 0) {
             statusElement.textContent = 'De tijd is op!';
             alarmSound.play();
+            return;
         }
+
+        const displayMinutes = Math.floor(remainingSeconds / 60);
+        const displaySeconds = remainingSeconds % 60;
+        const paddedSeconds = displaySeconds.toString().padStart(2, '0');
+        statusElement.textContent = `Nog ${displayMinutes}:${paddedSeconds} te gaan!`;
+
+        remainingSeconds--;
+        setTimeout(updateTimer, 1000);
+    }
+
+    // Functie voor het versnellende geluidseffect
+    function playYaySound() {
+        const elapsedTime = (Date.now() - startTime) / 1000; // Verstreken tijd in seconden
+        
+        // Zorg dat de geluidslus stopt als de timer op is
+        if (elapsedTime >= totalSeconds) {
+            return;
+        }
+        
+        // Bereken de voortgang (van 0.0 aan het begin tot 1.0 aan het einde)
+        const progress = elapsedTime / totalSeconds;
+        
+        // Speel het geluid af
+        yaySound.play();
+
+        // De vertraging daalt exponentieel van 2000ms naar 50ms
+        const startDelay = 2000;
+        const endDelay = 50;
+        const yayDelay = startDelay * Math.pow(endDelay / startDelay, progress);
+
+        setTimeout(playYaySound, yayDelay);
     }
     
-    // Start de timer
+    // Start de timers
     statusElement.textContent = `De timer is ingesteld op ${minutes} minuut${minutes === 1 ? '' : 'en'}.`;
-    setTimeout(updateTimer, 1000);
+    updateTimer(); 
+    playYaySound(); 
     
     backButton.addEventListener('click', () => window.history.back());
 });
