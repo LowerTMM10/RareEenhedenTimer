@@ -132,12 +132,30 @@ function createTrain(opposite = false) {
     img.className = 'train';
     container.appendChild(img);
 
-    // Willekeurige hoogte over het hele scherm
-    const containerHeight = container.clientHeight;
-    const trainHeight = 78; // hoogte van je trein in px
-    const maxTop = containerHeight - trainHeight;
-    const randomTop = Math.random() * maxTop;
-    img.style.top = randomTop + 'px';
+// Willekeurige hoogte over het hele scherm
+const containerHeight = container.clientHeight;
+
+// Stel een minimum en maximum grootte vast voor je treinen
+const minHeight = 40; // minimum hoogte in px
+const maxHeight = 100; // maximum hoogte in px
+
+// Bepaal de originele verhouding van je treinafbeelding (breedte / hoogte)
+const originalRatio = 2.56;
+
+// Genereer een willekeurige hoogte binnen de vastgestelde grenzen
+const randomHeight = Math.random() * (maxHeight - minHeight) + minHeight;
+
+// Bereken de bijbehorende breedte om de verhouding te behouden
+const newWidth = randomHeight * originalRatio;
+
+// Zorg ervoor dat de trein niet buiten het scherm valt, zowel verticaal als horizontaal
+const maxTop = containerHeight - randomHeight;
+const randomTop = Math.random() * maxTop;
+
+// Pas de stijlen toe
+img.style.top = randomTop + 'px';
+img.style.height = randomHeight + 'px';
+img.style.width = newWidth + 'px';
 
     // Random snelheid: tussen 5s en 12s
     const speed = 5 + Math.random() * 7;
