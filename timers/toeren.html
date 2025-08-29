@@ -85,8 +85,8 @@ body {
     <p class="timer-status" id="statusText">De timer is ingesteld.</p>
 
     <div id="gauge-container">
-        <img id="gauge-bg" src="assets/background.png" alt="Wijzerplaat">
-        <img id="gauge-pointer" src="assets/indicator.png" alt="Wijzer">
+        <img id="gauge-bg" src="https://rare-timer.netlify.app/assets/background.png" alt="Wijzerplaat">
+        <img id="gauge-pointer" src="https://rare-timer.netlify.app/assets/indicator.png" alt="Wijzer">
     </div>
 
     <button id="back-button">Terug</button>
@@ -94,7 +94,7 @@ body {
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
-  const soundUrl = 'assets/alarm.mp3';
+  const soundUrl = 'https://rare-timer.netlify.app/assets/alarm.mp3';
   const statusElement = document.getElementById('statusText');
   const backButton = document.getElementById('back-button');
   const audio = new Audio(soundUrl);
