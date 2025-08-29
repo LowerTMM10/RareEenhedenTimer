@@ -124,7 +124,7 @@
                 document.cookie = `TimerDuur=${minutes}; ${expires}; path=/`;
 
                 // Maak de nieuwe URL aan zonder het aantal minuten
-                const url = `https://rare-timer.netlify.app/${selectedOptionValue}`;
+                const url = `https://rare-timer.netlify.app/timers/${selectedOptionValue}`;
                 window.location.href = url;
             } else {
                 alert('Selecteer een optie en voer het aantal minuten in.');
