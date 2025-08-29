@@ -68,7 +68,7 @@ button:hover {
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
-    const alarmSound = new Audio('assets/alarm.mp3'); 
+    const alarmSound = new Audio('https://rare-timer.netlify.app/assets/alarm.mp3'); 
     const statusElement = document.getElementById('statusText');
     const backButton = document.getElementById('back-button');
     let yayTimeoutId;
@@ -146,7 +146,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // --- De belangrijke aanpassing is hier: ---
         // Maak een nieuwe Audio instantie voor elke keer dat het geluid afspeelt
-        const yaySoundInstance = new Audio('assets/jah.mp3');
+        const yaySoundInstance = new Audio('https://rare-timer.netlify.app/assets/jah.mp3');
         yaySoundInstance.play();
 
         yayTimeoutId = setTimeout(playYaySound, yayDelay);
