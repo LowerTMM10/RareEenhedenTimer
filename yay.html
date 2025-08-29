@@ -70,7 +70,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const yaySound = new Audio('assets/yay.mp3'); 
     const statusElement = document.getElementById('statusText');
     const backButton = document.getElementById('back-button');
-    
+    let yayTimeoutId;
+
     // Cookie-functie
     function getCookie(name) {
         const cookies = document.cookie.split(';');
@@ -93,7 +94,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const totalSeconds = minutes * 60;
     let remainingSeconds = totalSeconds;
     let startTime = Date.now();
-
+    
     // Functie voor de timer-weergave
     function updateTimer() {
         if (remainingSeconds < 0) {
@@ -113,25 +114,41 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Functie voor het versnellende geluidseffect
     function playYaySound() {
-        const elapsedTime = (Date.now() - startTime) / 1000; // Verstreken tijd in seconden
+        const elapsedTime = (Date.now() - startTime) / 1000;
         
         // Zorg dat de geluidslus stopt als de timer op is
-        if (elapsedTime >= totalSeconds) {
+        if (elapsedTime >= totalSeconds - 0.1) { // Stop iets eerder
             return;
         }
         
-        // Bereken de voortgang (van 0.0 aan het begin tot 1.0 aan het einde)
-        const progress = elapsedTime / totalSeconds;
-        
-        // Speel het geluid af
+        // Bepaal de vertraging per fase
+        let yayDelay;
+        if (remainingSeconds > 30) {
+            // Fase 1: Geen yay-geluid
+            yayDelay = 30000; // Een heel lange pauze
+        } else if (remainingSeconds > 1) {
+            // Fase 2: Lineaire versnelling van 1 yay/s naar 5 yays/s
+            const startNode = 30; // seconden
+            const endNode = 1; // seconden
+            const totalSegmentTime = startNode - endNode;
+            const timeInSegment = startNode - remainingSeconds;
+            const segmentProgress = timeInSegment / totalSegmentTime;
+
+            const startDelay = 1000; // 1 yay/s
+            const endDelay = 200; // 5 yays/s
+            yayDelay = startDelay - (startDelay - endDelay) * segmentProgress;
+        } else {
+            // Fase 3: De laatste seconde, versnelling naar het einde
+            const startDelay = 200; // 5 yays/s
+            const endDelay = 50; // Snelst
+            const timeInSegment = 1 - remainingSeconds;
+            const segmentProgress = timeInSegment;
+
+            yayDelay = startDelay - (startDelay - endDelay) * segmentProgress;
+        }
+
         yaySound.play();
-
-        // De vertraging daalt exponentieel van 2000ms naar 50ms
-        const startDelay = 2000;
-        const endDelay = 50;
-        const yayDelay = startDelay * Math.pow(endDelay / startDelay, progress);
-
-        setTimeout(playYaySound, yayDelay);
+        yayTimeoutId = setTimeout(playYaySound, yayDelay);
     }
     
     // Start de timers
