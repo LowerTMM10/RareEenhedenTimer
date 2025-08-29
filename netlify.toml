@@ -1,0 +1,2 @@
+[build]
+  command = "node build-assets-list.js && npm run build"
