@@ -55,6 +55,27 @@ button {
 button:hover {
   background-color: #5a6268;
 }
+  .yay-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+  pointer-events: none; /* zorgt ervoor dat de overlay niet klikbaar is */
+}
+
+.yay-popup.show {
+  opacity: 1;
+}
+
+.yay-popup img {
+  width: 300px; /* Pas de grootte van de afbeelding aan */
+  height: auto;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
 </style>
 </head>
 <body>
@@ -113,43 +134,71 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Functie voor het versnellende geluidseffect
-    function playYaySound() {
-        const elapsedTime = (Date.now() - startTime) / 1000;
-        
-        // Zorg dat de geluidslus stopt als de timer op is
-        if (elapsedTime >= totalSeconds - 0.1) {
-            return;
-        }
-        
-        // Bepaal de vertraging per fase
-        let yayDelay;
-        if (remainingSeconds > 30) {
-            yayDelay = 30000;
-        } else if (remainingSeconds > 1) {
-            const startNode = 30;
-            const endNode = 1;
-            const totalSegmentTime = startNode - endNode;
-            const timeInSegment = startNode - remainingSeconds;
-            const segmentProgress = timeInSegment / totalSegmentTime;
-
-            const startDelay = 1000;
-            const endDelay = 200;
-            yayDelay = startDelay - (startDelay - endDelay) * segmentProgress;
-        } else {
-            const startDelay = 200;
-            const endDelay = 50;
-            const timeInSegment = 1 - remainingSeconds;
-            const segmentProgress = timeInSegment;
-            yayDelay = startDelay - (startDelay - endDelay) * segmentProgress;
-        }
-
-        // --- De belangrijke aanpassing is hier: ---
-        // Maak een nieuwe Audio instantie voor elke keer dat het geluid afspeelt
-        const yaySoundInstance = new Audio('https://rare-timer.netlify.app/assets/yay.mp3');
-        yaySoundInstance.play();
-
-        yayTimeoutId = setTimeout(playYaySound, yayDelay);
+// Functie voor het versnellende geluidseffect en de pop-up
+function playYaySound() {
+    const elapsedTime = (Date.now() - startTime) / 1000;
+    
+    // Zorg dat de geluidslus stopt als de timer op is
+    if (elapsedTime >= totalSeconds - 0.1) {
+        return;
     }
+    
+    // Bepaal de vertraging per fase
+    let yayDelay;
+    if (remainingSeconds > 30) {
+        yayDelay = 30000;
+    } else if (remainingSeconds > 1) {
+        const startNode = 30;
+        const endNode = 1;
+        const totalSegmentTime = startNode - endNode;
+        const timeInSegment = startNode - remainingSeconds;
+        const segmentProgress = timeInSegment / totalSegmentTime;
+
+        const startDelay = 1000;
+        const endDelay = 200;
+        yayDelay = startDelay - (startDelay - endDelay) * segmentProgress;
+    } else {
+        const startDelay = 200;
+        const endDelay = 50;
+        const timeInSegment = 1 - remainingSeconds;
+        const segmentProgress = timeInSegment;
+        yayDelay = startDelay - (startDelay - endDelay) * segmentProgress;
+    }
+
+    // Speel het geluid af en toon de pop-up
+    const yaySoundInstance = new Audio('https://rare-timer.netlify.app/assets/yay.mp3');
+    yaySoundInstance.play();
+    showYayPopup();
+
+    yayTimeoutId = setTimeout(playYaySound, yayDelay);
+}
+
+// Nieuwe functie om de pop-up te tonen en te verbergen
+function showYayPopup() {
+    const popup = document.createElement('div');
+    popup.classList.add('yay-popup');
+    
+    const img = document.createElement('img');
+    img.src = 'https://rare-timer.netlify.app/assets/yay.jpg';
+    img.alt = 'Yay!';
+    
+    popup.appendChild(img);
+    document.body.appendChild(popup);
+    
+    // Toon de pop-up na een kleine vertraging
+    setTimeout(() => {
+        popup.classList.add('show');
+    }, 10);
+    
+    // Verwijder de pop-up na 0.5 seconden
+    setTimeout(() => {
+        popup.classList.remove('show');
+        // Verwijder het element volledig uit de DOM na de fade-out animatie
+        setTimeout(() => {
+            document.body.removeChild(popup);
+        }, 500); // 500ms komt overeen met de CSS transition-duur
+    }, 500); // Tijd dat de pop-up zichtbaar is voordat hij begint te faden
+}
     
     // Start de timers
     statusElement.textContent = `De timer is ingesteld op ${minutes} minuut${minutes === 1 ? '' : 'en'}.`;
