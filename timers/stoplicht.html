@@ -6,7 +6,9 @@ function scalePage() {
     const scaleX = window.innerWidth / 1920;
     const scaleY = window.innerHeight / 1080;
     const scale = Math.max(scaleX, scaleY);
-    console.log(scale)
+    console.log("ScaleX = "+scaleX)
+    console.log("ScaleY = "+scaleY)
+    console.log("Scale = "+scale)
 
     // Combine centering and scaling
     container.style.transform = `translate(-50%, -50%) scale(${scale})`;
