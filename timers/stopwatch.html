@@ -32,8 +32,8 @@
         }
 
         #display {
-            font-family: 'Seven Segment', monospace; /* Pas het lettertype hier toe */
-            font-size: 3.5rem; /* Maak de tekst iets groter voor betere leesbaarheid */
+            font-family: 'Seven Segment', monospace;
+            font-size: 3.5rem;
             margin-bottom: 20px;
             color: #333;
         }
@@ -50,10 +50,10 @@
         }
 
         #startStopBtn {
-            background-color: #4CAF50; /* Groen voor Start */
+            background-color: #4CAF50;
         }
         #startStopBtn.running {
-            background-color: #f44336; /* Rood voor Stop */
+            background-color: #f44336;
         }
         #startStopBtn:hover {
             opacity: 0.9;
@@ -70,7 +70,7 @@
 <body>
 
     <div class="stopwatch-container">
-        <h1 id="display">00:00:00.000</h1>
+        <h1 id="display">00:00:00.00</h1>
         <div class="buttons">
             <button id="startStopBtn">Start</button>
             <button id="resetBtn">Reset</button>
@@ -92,7 +92,7 @@
         function startStopwatch() {
             if (!running) {
                 startTime = new Date().getTime() - savedTime;
-                tInterval = setInterval(getShowTime, 1);
+                tInterval = setInterval(getShowTime, 10);
                 running = true;
                 startStopBtn.textContent = "Stop";
                 startStopBtn.classList.add('running');
@@ -109,7 +109,7 @@
             clearInterval(tInterval);
             savedTime = 0;
             running = false;
-            display.textContent = "00:00:00.000";
+            display.textContent = "00:00:00.00";
             startStopBtn.textContent = "Start";
             startStopBtn.classList.remove('running');
         }
@@ -121,19 +121,18 @@
             let hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             let minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
             let seconds = Math.floor((difference % (1000 * 60)) / 1000);
-            let milliseconds = Math.floor((difference % 1000));
+            let centiseconds = Math.floor((difference % 1000) / 10);
 
             hours = (hours < 10) ? "0" + hours : hours;
             minutes = (minutes < 10) ? "0" + minutes : minutes;
             seconds = (seconds < 10) ? "0" + seconds : seconds;
-            milliseconds = (milliseconds < 100) ? (milliseconds < 10) ? "00" + milliseconds : "0" + milliseconds : milliseconds;
+            centiseconds = (centiseconds < 10) ? "0" + centiseconds : centiseconds;
 
-            display.textContent = hours + ":" + minutes + ":" + seconds + "." + milliseconds;
+            display.textContent = hours + ":" + minutes + ":" + seconds + "." + centiseconds;
         }
 
         startStopBtn.addEventListener('click', startStopwatch);
         resetBtn.addEventListener('click', resetStopwatch);
     </script>
-
 </body>
 </html>
