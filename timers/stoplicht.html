@@ -47,26 +47,29 @@
             flex-direction: column;
             align-items: center;
         }
-        .traffic-light {
-            background-color: #333;
-            width: 100px;
-            height: 284px;
-            border-radius: 1rem;
-            padding: 0.5rem;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-around;
-            align-items: center;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5), inset 0 2px 4px rgba(255, 255, 255, 0.1);
-        }
-        .light {
-            width: 70px;
-            height: 70px;
-            border-radius: 50%;
-            background-color: #4a5568;
-            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
-            transition: background-color 0.3s ease;
-        }
+.traffic-light {
+    background-color: #333;
+    width: 20vw;       /* schaal mee met schermbreedte */
+    max-width: 120px;  /* limiet op desktop */
+    height: 55vh;      /* schaal mee met schermhoogte */
+    max-height: 350px; /* limiet */
+    border-radius: 1rem;
+    padding: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.light {
+    width: 60%;        /* relatief aan traffic-light */
+    aspect-ratio: 1;   /* altijd een cirkel */
+    border-radius: 50%;
+    background-color: #4a5568;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+    transition: background-color 0.3s ease;
+}
+
         .light.red.on {
             background-color: #ef4444; /* Rood */
             box-shadow: 0 0 20px #ef4444, inset 0 2px 4px rgba(255, 255, 255, 0.3);
@@ -120,9 +123,10 @@
 </head>
 <body>
     <div class="container">
-        <h1 class="text-6xl font-bold tracking-widest text-blue-600 drop-shadow-lg mb-12">
-            Verkeerslicht
-        </h1>
+<h1 class="text-4xl md:text-6xl font-bold tracking-widest text-blue-600 drop-shadow-lg mb-12">
+    Verkeerslicht
+</h1>
+
 
         <div class="traffic-light-container">
             <div class="traffic-light">
