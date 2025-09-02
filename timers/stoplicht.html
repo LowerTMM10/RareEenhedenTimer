@@ -145,6 +145,12 @@ h1 {
         const greenButton = document.getElementById('green-button');
         const backButton = document.getElementById('back-button');
 
+        function turnOffAllLights() {
+            redLight.classList.remove('on');
+            orangeLight.classList.remove('on');
+            greenLight.classList.remove('on');
+        }
+
         redButton.addEventListener('click', () => {
             turnOffAllLights();
             redLight.classList.add('on');
