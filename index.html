@@ -81,6 +81,7 @@
     <h1>Overige</h1>
     <div class="form-group">
         <button id="stoplicht-button">Stoplicht</button>
+        <button id="stopwatch-button">Stopwatch</button>
     </div>
 </div>
 
@@ -90,6 +91,7 @@
         const minutesInput = document.getElementById('minutes');
         const redirectButton = document.getElementById('redirect-button');
         const stoplichtButton = document.getElementById('stoplicht-button');
+        const stopwatchButton = document.getElementById('stopwatch-button');
         
         const githubJsonUrl = 'https://raw.githubusercontent.com/LowerTMM10/RareEenhedenTimer/refs/heads/main/Keuzes.json';
 
@@ -143,6 +145,9 @@
         // Event listener voor de nieuwe "Stoplicht" knop
         stoplichtButton.addEventListener('click', () => {
             window.location.href = `https://rare-timer.netlify.app/timers/stoplicht`;
+        });
+        stopwatchButton.addEventListener('click', () => {
+            window.location.href = `https://rare-timer.netlify.app/timers/stopwatch`;
         });
     });
 </script>
