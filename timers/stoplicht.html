@@ -5,11 +5,11 @@ function scalePage() {
     const container = document.querySelector('.container');
     const scaleX = window.innerWidth / 1920;
     const scaleY = window.innerHeight / 1080;
-    const scale = Math.min(scaleX, scaleY);
+    const scale = Math.max(scaleX, scaleY);
     console.log(scale)
 
     // Combine centering and scaling
-    container.style.transform = `translate(-50%, -50%) scale(${0.9})`;
+    container.style.transform = `translate(-50%, -50%) scale(${scale})`;
 }
 
 window.addEventListener('resize', scalePage);
