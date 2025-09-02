@@ -3,13 +3,11 @@
 <script>
 function scalePage() {
     const container = document.querySelector('.container');
-    const baseWidth = 1920;
-    const baseHeight = 1080;
-    const scaleX = window.innerWidth / baseWidth;
-    const scaleY = window.innerHeight / baseHeight;
+    const scaleX = window.innerWidth / 1920;
+    const scaleY = window.innerHeight / 1080;
     const scale = Math.min(scaleX, scaleY);
-    
-    // Apply the scaling and centering together
+
+    // Combine centering and scaling
     container.style.transform = `translate(-50%, -50%) scale(${scale})`;
 }
 
@@ -23,27 +21,19 @@ window.addEventListener('load', scalePage);
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    color: #333;
-    width: 100vw;
-    height: 100vh;
-    margin: 0;
-    /* Remove flexbox centering */
-    overflow: hidden;
-    text-align: center;
-}
-.container {
-    /* The scale origin is important for proper centering */
-    transform-origin: top left; 
-    transition: transform 0.2s ease-in-out;
-    /* Add an absolute position to enable centering via transforms */
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) scale(1); /* Initial state with centering */
+    /* ... other styles ... */
+    display: block; /* Remove flexbox */
+    /* ... other styles ... */
 }
 
+.container {
+    transform-origin: top center; /* This can be kept, but the next lines are more important */
+    transition: transform 0.2s ease-in-out;
+    position: absolute; /* Add this */
+    top: 50%; /* Add this */
+    left: 50%; /* Add this */
+    transform: translate(-50%, -50%) scale(1); /* This will be handled by JavaScript */
+}
 
         h1 {
             color: #007BFF;
