@@ -1,165 +1,173 @@
-
-
 <!DOCTYPE html>
 <html lang="nl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Josje timer</title>
-<style>
-body {
-  font-family: Arial, sans-serif;
-  background-color: #f4f4f4;
-  color: #333;
-  width: 100vw;
-  height: 100vh;
-  margin: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
-}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verkeerslicht</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            width: 100vw;
+            height: 100vh;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            text-align: center;
+        }
+        .container {
+            width: 100%;
+            height: 100%;
+            padding: 20px;
+            background-color: #fff;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
 
-.container {
-  width: 100%;
-  height: 100%;
-  padding: 20px;
-  background-color: #fff;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-}
-
-h1 {
-  color: #007BFF;
-}
-
-.timer-status {
-  font-size: 1.2em;
-  margin-top: 10px;
-}
-
-button {
-  padding: 10px 20px;
-  background-color: #6c757d;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  font-size: 16px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  margin-top: 20px;
-}
-button:hover {
-  background-color: #5a6268;
-}
-</style>
+        h1 {
+            color: #007BFF;
+            font-size: 2.5rem; /* Aangepaste lettergrootte */
+            font-weight: bold; /* Vetgedrukte tekst */
+        }
+        .traffic-light-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .traffic-light {
+            background-color: #333;
+            width: 100px;
+            height: 284px;
+            border-radius: 1rem;
+            padding: 0.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5), inset 0 2px 4px rgba(255, 255, 255, 0.1);
+        }
+        .light {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background-color: #4a5568;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+            transition: background-color 0.3s ease;
+        }
+        .light.red.on {
+            background-color: #ef4444; /* Rood */
+            box-shadow: 0 0 20px #ef4444, inset 0 2px 4px rgba(255, 255, 255, 0.3);
+        }
+        .light.orange.on {
+            background-color: #f97316; /* Oranje */
+            box-shadow: 0 0 20px #f97316, inset 0 2px 4px rgba(255, 255, 255, 0.3);
+        }
+        .light.green.on {
+            background-color: #22c55e; /* Groen */
+            box-shadow: 0 0 20px #22c55e, inset 0 2px 4px rgba(255, 255, 255, 0.3);
+        }
+        .controls {
+            margin-top: 2rem;
+            display: flex;
+            gap: 1rem;
+        }
+        .button {
+            padding: 10px 20px;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+        .button.red {
+            background-color: #ef4444;
+        }
+        .button.orange {
+            background-color: #f97316;
+        }
+        .button.green {
+            background-color: #22c55e;
+        }
+        .button:hover.red {
+            background-color: #dc2626;
+        }
+        .button:hover.orange {
+            background-color: #c05609;
+        }
+        .button:hover.green {
+            background-color: #15803d;
+        }
+        .button:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+    </style>
 </head>
 <body>
+    <div class="container">
+        <h1>Mijn Verkeerslicht</h1>
 
-<div class="container">
-  <h1>Josje timer</h1>
-  <p class="timer-status" id="statusText">De timer is ingesteld.</p>
-  <button id="back-button">Terug</button>
-</div>
+        <div class="traffic-light-container">
+            <div class="traffic-light">
+                <div id="red-light" class="light red"></div>
+                <div id="orange-light" class="light orange"></div>
+                <div id="green-light" class="light green"></div>
+            </div>
+        </div>
 
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-    const alarmSound = new Audio('https://rare-timer.netlify.app/assets/alarm.mp3'); 
-    const statusElement = document.getElementById('statusText');
-    const backButton = document.getElementById('back-button');
-    let yayTimeoutId;
+        <div class="controls">
+            <button id="red-button" class="button red">Rood</button>
+            <button id="orange-button" class="button orange">Oranje</button>
+            <button id="green-button" class="button green">Groen</button>
+        </div>
+    </div>
 
-    // Cookie-functie
-    function getCookie(name) {
-        const cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-            let cookie = cookies[i].trim();
-            if (cookie.startsWith(name + '=')) return cookie.substring(name.length + 1);
-        }
-        return null;
-    }
-    
-    const timerDurationValue = getCookie('TimerDuur');
-    const minutes = parseInt(timerDurationValue, 10);
-    
-    if (timerDurationValue === null || isNaN(minutes)) {
-        statusElement.textContent = 'Fout: De "TimerDuur" cookie is niet gevonden of is geen geldig getal.';
-        console.error('Cookie "TimerDuur" is niet gevonden of is geen geldig getal.');
-        return;
-    } 
-    
-    const totalSeconds = minutes * 60;
-    let remainingSeconds = totalSeconds;
-    let startTime = Date.now();
-    
-    // Functie voor de timer-weergave
-    function updateTimer() {
-        if (remainingSeconds < 0) {
-            statusElement.textContent = 'De tijd is op!';
-            alarmSound.play();
-            return;
-        }
-
-        const displayMinutes = Math.floor(remainingSeconds / 60);
-        const displaySeconds = remainingSeconds % 60;
-        const paddedSeconds = displaySeconds.toString().padStart(2, '0');
-        statusElement.textContent = `Nog ${displayMinutes}:${paddedSeconds} te gaan!`;
-
-        remainingSeconds--;
-        setTimeout(updateTimer, 1000);
-    }
-
-    // Functie voor het versnellende geluidseffect
-    function playYaySound() {
-        const elapsedTime = (Date.now() - startTime) / 1000;
+    <script>
+        const redLight = document.getElementById('red-light');
+        const orangeLight = document.getElementById('orange-light');
+        const greenLight = document.getElementById('green-light');
         
-        // Zorg dat de geluidslus stopt als de timer op is
-        if (elapsedTime >= totalSeconds - 0.1) {
-            return;
-        }
-        
-        // Bepaal de vertraging per fase
-        let yayDelay;
-        if (remainingSeconds > 30) {
-            yayDelay = 30000;
-        } else if (remainingSeconds > 1) {
-            const startNode = 30;
-            const endNode = 1;
-            const totalSegmentTime = startNode - endNode;
-            const timeInSegment = startNode - remainingSeconds;
-            const segmentProgress = timeInSegment / totalSegmentTime;
+        const redButton = document.getElementById('red-button');
+        const orangeButton = document.getElementById('orange-button');
+        const greenButton = document.getElementById('green-button');
 
-            const startDelay = 1000;
-            const endDelay = 200;
-            yayDelay = startDelay - (startDelay - endDelay) * segmentProgress;
-        } else {
-            const startDelay = 200;
-            const endDelay = 50;
-            const timeInSegment = 1 - remainingSeconds;
-            const segmentProgress = timeInSegment;
-            yayDelay = startDelay - (startDelay - endDelay) * segmentProgress;
+        function turnOffAllLights() {
+            redLight.classList.remove('on');
+            orangeLight.classList.remove('on');
+            greenLight.classList.remove('on');
         }
 
-        // --- De belangrijke aanpassing is hier: ---
-        // Maak een nieuwe Audio instantie voor elke keer dat het geluid afspeelt
-        const yaySoundInstance = new Audio('https://rare-timer.netlify.app/assets/jah.mp3');
-        yaySoundInstance.play();
+        redButton.addEventListener('click', () => {
+            turnOffAllLights();
+            redLight.classList.add('on');
+        });
 
-        yayTimeoutId = setTimeout(playYaySound, yayDelay);
-    }
-    
-    // Start de timers
-    statusElement.textContent = `De timer is ingesteld op ${minutes} minuut${minutes === 1 ? '' : 'en'}.`;
-    updateTimer(); 
-    playYaySound(); 
-    
-    backButton.addEventListener('click', () => window.history.back());
-});
-</script>
+        orangeButton.addEventListener('click', () => {
+            turnOffAllLights();
+            orangeLight.classList.add('on');
+        });
+
+        greenButton.addEventListener('click', () => {
+            turnOffAllLights();
+            greenLight.classList.add('on');
+        });
+
+        // Zet bij het laden van de pagina het groene licht aan
+        window.addEventListener('load', () => {
+            greenLight.classList.add('on');
+        });
+    </script>
 
 </body>
 </html>
