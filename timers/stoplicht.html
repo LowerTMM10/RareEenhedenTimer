@@ -3,10 +3,14 @@
 <script>
 function scalePage() {
     const container = document.querySelector('.container');
-    const scaleX = window.innerWidth / 1920;  // 1920 = jouw "basisbreedte"
-    const scaleY = window.innerHeight / 1080; // 1080 = jouw "basishoogte"
-    const scale = Math.min(scaleX, scaleY);   // kies de kleinste zodat alles past
-    container.style.transform = `scale(${scale})`;
+    const baseWidth = 1920;
+    const baseHeight = 1080;
+    const scaleX = window.innerWidth / baseWidth;
+    const scaleY = window.innerHeight / baseHeight;
+    const scale = Math.min(scaleX, scaleY);
+    
+    // Apply the scaling and centering together
+    container.style.transform = `translate(-50%, -50%) scale(${scale})`;
 }
 
 window.addEventListener('resize', scalePage);
@@ -18,24 +22,27 @@ window.addEventListener('load', scalePage);
     <title>Verkeerslicht</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            color: #333;
-            width: 100vw;
-            height: 100vh;
-            margin: 0;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-            text-align: center;
-        }
-        .container {
-            transform-origin: top center;
-            transition: transform 0.2s ease-in-out;
-        }
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    /* Remove flexbox centering */
+    overflow: hidden;
+    text-align: center;
+}
+.container {
+    /* The scale origin is important for proper centering */
+    transform-origin: top left; 
+    transition: transform 0.2s ease-in-out;
+    /* Add an absolute position to enable centering via transforms */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(1); /* Initial state with centering */
+}
 
 
         h1 {
