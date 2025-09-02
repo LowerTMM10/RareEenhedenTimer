@@ -5,7 +5,7 @@ function scalePage() {
     const container = document.querySelector('.container');
     const scaleX = window.innerWidth / 1920;
     const scaleY = window.innerHeight / 1080;
-    const scale = Math.min(scaleX, scaleY); // automatische schaal passend in scherm
+    const scale = Math.min(scaleX, scaleY) * 1.55; // automatische schaal passend in scherm
 
     container.style.transform = `translate(-50%, -50%) scale(${scale})`;
 }
