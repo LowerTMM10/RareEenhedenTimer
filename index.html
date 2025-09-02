@@ -18,6 +18,7 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             max-width: 500px;
             margin: auto;
+            margin-bottom: 20px; /* Add some space between containers */
         }
         h1 {
             text-align: center;
@@ -76,11 +77,19 @@
     </div>
 </div>
 
+<div class="container">
+    <h1>Overige</h1>
+    <div class="form-group">
+        <button id="stoplicht-button">Stoplicht</button>
+    </div>
+</div>
+
 <script>
     document.addEventListener('DOMContentLoaded', (event) => {
         const dropdown = document.getElementById('json-data');
         const minutesInput = document.getElementById('minutes');
         const redirectButton = document.getElementById('redirect-button');
+        const stoplichtButton = document.getElementById('stoplicht-button');
         
         const githubJsonUrl = 'https://raw.githubusercontent.com/LowerTMM10/RareEenhedenTimer/refs/heads/main/Keuzes.json';
 
@@ -129,6 +138,11 @@
             } else {
                 alert('Selecteer een optie en voer het aantal minuten in.');
             }
+        });
+
+        // Event listener voor de nieuwe "Stoplicht" knop
+        stoplichtButton.addEventListener('click', () => {
+            window.location.href = `https://rare-timer.netlify.app/timers/stoplicht`;
         });
     });
 </script>
