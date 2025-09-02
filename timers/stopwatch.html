@@ -50,10 +50,10 @@
         }
 
         #startStopBtn {
-            background-color: #4CAF50;
+            background-color: #4CAF50; /* Groen voor Start */
         }
         #startStopBtn.running {
-            background-color: #f44336;
+            background-color: #f44336; /* Rood voor Stop */
         }
         #startStopBtn:hover {
             opacity: 0.9;
@@ -65,6 +65,13 @@
         #resetBtn:hover {
             background-color: #e68a00;
         }
+
+        #backBtn {
+            background-color: #555;
+        }
+        #backBtn:hover {
+            background-color: #333;
+        }
     </style>
 </head>
 <body>
@@ -74,6 +81,7 @@
         <div class="buttons">
             <button id="startStopBtn">Start</button>
             <button id="resetBtn">Reset</button>
+            <button id="backBtn">Terug</button>
         </div>
     </div>
 
@@ -88,6 +96,7 @@
         const display = document.getElementById('display');
         const startStopBtn = document.getElementById('startStopBtn');
         const resetBtn = document.getElementById('resetBtn');
+        const backBtn = document.getElementById('backBtn');
 
         function startStopwatch() {
             if (!running) {
@@ -114,6 +123,10 @@
             startStopBtn.classList.remove('running');
         }
 
+        function goBack() {
+            window.history.back();
+        }
+
         function getShowTime() {
             updatedTime = new Date().getTime();
             difference = updatedTime - startTime;
@@ -133,6 +146,7 @@
 
         startStopBtn.addEventListener('click', startStopwatch);
         resetBtn.addEventListener('click', resetStopwatch);
+        backBtn.addEventListener('click', goBack);
     </script>
 </body>
 </html>
