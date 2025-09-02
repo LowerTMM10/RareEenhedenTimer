@@ -1,19 +1,20 @@
 <!DOCTYPE html> 
 <html lang="nl"> 
-    <script> 
-        function scalePage() {
-            const container = document.querySelector('.container'); 
-            const scaleX = window.innerWidth / 1920; 
-            const scaleY = window.innerHeight / 1080; 
-            const scale = Math.min(scaleX, scaleY) * 1.55; 
-            console.log("ScaleX = "+scaleX) 
-                console.log("ScaleY = "+scaleY) 
-                    console.log("Scale = "+scale) 
-            // Combine centering and scaling 
-            container.style.transform = translate(-50%, -50%) scale(${scale}); } 
-        window.addEventListener('resize', scalePage); 
-        window.addEventListener('load', scalePage); 
-    </script> 
+  <script>
+function scalePage() {
+    const container = document.querySelector('.container');
+    const scaleX = window.innerWidth / 1920;
+    const scaleY = window.innerHeight / 1080;
+    const scale = Math.min(scaleX, scaleY); // automatische schaal passend in scherm
+
+    container.style.transform = `translate(-50%, -50%) scale(${scale})`;
+}
+
+// Bij laden en resize toepassen
+window.addEventListener('resize', scalePage);
+window.addEventListener('load', scalePage);
+</script>
+
     <head> 
         <meta charset="UTF-8"> 
         <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
