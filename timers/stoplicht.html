@@ -1,26 +1,37 @@
-<!DOCTYPE html>
-<html lang="nl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Verkeerslicht</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-body {
-    display: block;
-    background-color: #f4f4f4;
-    font-family: Arial, sans-serif;
-}
-
-.container {
-    transform-origin: top center;
-    transition: transform 0.2s ease-in-out;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) scale(1);
-}
-
+<!DOCTYPE html> 
+<html lang="nl"> 
+    <script> 
+        function scalePage() {
+            const container = document.querySelector('.container'); 
+            const scaleX = window.innerWidth / 1920; 
+            const scaleY = window.innerHeight / 1080; 
+            const scale = Math.min(scaleX, scaleY) * 1.55; 
+            console.log("ScaleX = "+scaleX) 
+                console.log("ScaleY = "+scaleY) 
+                    console.log("Scale = "+scale) 
+            // Combine centering and scaling 
+            container.style.transform = translate(-50%, -50%) scale(${scale}); } 
+        window.addEventListener('resize', scalePage); 
+        window.addEventListener('load', scalePage); 
+    </script> 
+    <head> 
+        <meta charset="UTF-8"> 
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+        <title>Verkeerslicht</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <style> 
+            body { /* ... other styles ... */ 
+                display: block; /* Remove flexbox */ /* ... other styles ... */ 
+            } 
+            .container { 
+                transform-origin: top center; 
+                /* This can be kept, but the next lines are more important */ 
+                transition: transform 0.2s ease-in-out;
+                position: absolute; /* Add this */ top: 50%; 
+                /* Add this */ left: 50%;
+                /* Add this */ transform:
+                    translate(-50%, -50%) scale(1);
+                /* This will be handled by JavaScript */ }
 h1 {
     color: #007BFF;
     font-size: 4rem;
