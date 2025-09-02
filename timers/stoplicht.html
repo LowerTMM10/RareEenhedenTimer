@@ -1,22 +1,5 @@
 <!DOCTYPE html>
 <html lang="nl">
-<script>
-function scalePage() {
-    const container = document.querySelector('.container');
-    const scaleX = window.innerWidth / 1920;
-    const scaleY = window.innerHeight / 1080;
-    const scale = Math.min(scaleX, scaleY) * 1.55;
-    console.log("ScaleX = "+scaleX)
-    console.log("ScaleY = "+scaleY)
-    console.log("Scale = "+scale)
-
-    // Combine centering and scaling
-    container.style.transform = `translate(-50%, -50%) scale(${scale})`;
-}
-
-window.addEventListener('resize', scalePage);
-window.addEventListener('load', scalePage);
-</script>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -24,28 +7,28 @@ window.addEventListener('load', scalePage);
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
 body {
-    /* ... other styles ... */
-    display: block; /* Remove flexbox */
-    /* ... other styles ... */
+    display: block;
+    background-color: #f4f4f4;
+    font-family: Arial, sans-serif;
 }
 
 .container {
-    transform-origin: top center; /* This can be kept, but the next lines are more important */
+    transform-origin: top center;
     transition: transform 0.2s ease-in-out;
-    position: absolute; /* Add this */
-    top: 50%; /* Add this */
-    left: 50%; /* Add this */
-    transform: translate(-50%, -50%) scale(1); /* This will be handled by JavaScript */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(1);
 }
 
-        h1 {
-            color: #007BFF;
-            font-size: 4rem; /* veel groter */
-            font-weight: bold;
-            letter-spacing: 4px; /* extra ruimte tussen letters */
-            text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.2); /* subtiele schaduw */
-            margin-bottom: 2rem; /* wat ruimte onder de titel */
-        }
+h1 {
+    color: #007BFF;
+    font-size: 4rem;
+    font-weight: bold;
+    letter-spacing: 4px;
+    text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.2);
+    margin-bottom: 2rem;
+}
 
 .traffic-light-container {
     display: flex;
@@ -73,63 +56,68 @@ body {
     transition: background-color 0.3s ease;
 }
 .light.red.on {
-    background-color: #ef4444; /* Rood */
+    background-color: #ef4444;
     box-shadow: 0 0 20px #ef4444, inset 0 2px 4px rgba(255, 255, 255, 0.3);
 }
 .light.orange.on {
-    background-color: #f97316; /* Oranje */
+    background-color: #f97316;
     box-shadow: 0 0 20px #f97316, inset 0 2px 4px rgba(255, 255, 255, 0.3);
 }
 .light.green.on {
-    background-color: #22c55e; /* Groen */
+    background-color: #22c55e;
     box-shadow: 0 0 20px #22c55e, inset 0 2px 4px rgba(255, 255, 255, 0.3);
 }
 
-        .controls {
-            margin-top: 2rem;
-            display: flex;
-            gap: 1rem;
-        }
-        .button {
-            padding: 10px 20px;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-        }
-        .button.red {
-            background-color: #ef4444;
-        }
-        .button.orange {
-            background-color: #f97316;
-        }
-        .button.green {
-            background-color: #22c55e;
-        }
-        .button:hover.red {
-            background-color: #dc2626;
-        }
-        .button:hover.orange {
-            background-color: #c05609;
-        }
-        .button:hover.green {
-            background-color: #15803d;
-        }
-        .button:active {
-            transform: translateY(2px);
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-        }
+.controls {
+    margin-top: 2rem;
+    display: flex;
+    gap: 1rem;
+}
+.button {
+    padding: 10px 20px;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+.button.red {
+    background-color: #ef4444;
+}
+.button.orange {
+    background-color: #f97316;
+}
+.button.green {
+    background-color: #22c55e;
+}
+.button.gray {
+    background-color: #6b7280; /* Grijs */
+}
+.button:hover.red {
+    background-color: #dc2626;
+}
+.button:hover.orange {
+    background-color: #c05609;
+}
+.button:hover.green {
+    background-color: #15803d;
+}
+.button:hover.gray {
+    background-color: #4b5563;
+}
+.button:active {
+    transform: translateY(2px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
     </style>
 </head>
 <body>
     <div class="container">
-<h1 class="text-4xl md:text-6xl font-bold tracking-widest text-blue-600 drop-shadow-lg mb-12">
-    Verkeerslicht
-</h1>
-
+        <h1 class="text-4xl md:text-6xl font-bold tracking-widest text-blue-600 drop-shadow-lg mb-12">
+            Verkeerslicht
+        </h1>
 
         <div class="traffic-light-container">
             <div class="traffic-light">
@@ -143,6 +131,7 @@ body {
             <button id="red-button" class="button red">Rood</button>
             <button id="orange-button" class="button orange">Oranje</button>
             <button id="green-button" class="button green">Groen</button>
+            <button id="back-button" class="button gray">Terug</button>
         </div>
     </div>
 
@@ -154,12 +143,7 @@ body {
         const redButton = document.getElementById('red-button');
         const orangeButton = document.getElementById('orange-button');
         const greenButton = document.getElementById('green-button');
-
-        function turnOffAllLights() {
-            redLight.classList.remove('on');
-            orangeLight.classList.remove('on');
-            greenLight.classList.remove('on');
-        }
+        const backButton = document.getElementById('back-button');
 
         redButton.addEventListener('click', () => {
             turnOffAllLights();
@@ -175,12 +159,16 @@ body {
             turnOffAllLights();
             greenLight.classList.add('on');
         });
+        
+        backButton.addEventListener('click', () => {
+            window.history.back();
+        });
+
 
         // Zet bij het laden van de pagina het groene licht aan
         window.addEventListener('load', () => {
             greenLight.classList.add('on');
         });
     </script>
-
 </body>
 </html>
